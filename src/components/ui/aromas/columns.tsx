@@ -8,7 +8,7 @@ import { type Dispatch, type SetStateAction } from "react";
 // You can use a Zod schema here if you want.
 
 type ColumnProps = {
-    handleDeleteRow: (id: number) => void;
+    handleDeleteRow: Dispatch<SetStateAction<Aromachemical | null>>;
     handleEditAromachemical: Dispatch<SetStateAction<Aromachemical | null>>;
 }
 
@@ -32,7 +32,7 @@ export function getColumns({ handleDeleteRow, handleEditAromachemical }: ColumnP
                 return (
                     <Button onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteRow(cell.row.original.id)
+                        handleDeleteRow(cell.row.original)
                     }}>
                         Delete
                     </Button>

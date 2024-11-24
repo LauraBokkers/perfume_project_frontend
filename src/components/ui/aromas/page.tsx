@@ -86,7 +86,7 @@ async function editAromaChemical({ id, name, description }: Aromachemical): Prom
 
 export default function TablePage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [idToDelete, setIdToDelete] = useState<null | number>(null);
+    const [aromachemicalToDelete, setAromachemicalToDelete] = useState<null | Aromachemical>(null);
     const [aromachemicalToEdit, setAromachemicalToEdit] = useState<null | Aromachemical>(null);
 
     const queryClient = useQueryClient()
@@ -135,14 +135,14 @@ export default function TablePage() {
 
     return (
         <div className="container mx-auto py-10">
-            {data && <DataTable columns={getColumns({ handleDeleteRow: setIdToDelete, handleEditAromachemical: setAromachemicalToEdit })}
+            {data && <DataTable columns={getColumns({ handleDeleteRow: setAromachemicalToDelete, handleEditAromachemical: setAromachemicalToEdit })}
                 data={data} />}
             <Button onClick={() => setIsDialogOpen(true)}>Add new</Button>
             {isDialogOpen && <AddModal handleSubmit={newAromaChemicalMutation.mutate} isPending={newAromaChemicalMutation.isPending} onClose={() => setIsDialogOpen(false)} />}
-            {idToDelete && (
+            {aromachemicalToDelete && (
                 <DeleteModal
-                    id={idToDelete}
-                    onClose={() => setIdToDelete(null)}
+                    aromachemical={aromachemicalToDelete}
+                    onClose={() => setAromachemicalToDelete(null)}
                     onConfirm={deleteAromachemicalMutation.mutate} />
             )}
 

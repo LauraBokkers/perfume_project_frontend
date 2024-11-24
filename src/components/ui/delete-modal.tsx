@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../icons/close-icon";
+import { Aromachemical } from "./aromas/page";
+
 
 interface ModalPropType {
     onClose: () => void;
     onConfirm: (id: number) => void;
-    id: number;
+    aromachemical: Aromachemical;
 }
 
-const DeleteModal = ({ onClose, onConfirm, id }: ModalPropType) => {
+const DeleteModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
             onClose();
@@ -40,9 +42,9 @@ const DeleteModal = ({ onClose, onConfirm, id }: ModalPropType) => {
                     <CloseIcon height={14} width={14} fill="white" />
                 </div>
                 <div className="flex h-auto max-w-96 flex-col">
-                    <span className="text-black"> Are you sure you want to delete {id}?</span>
+                    <span className="text-black"> Are you sure you want to delete the aromachemical <span className="font-bold">{aromachemical.name}</span>?</span>
                 </div>
-                <Button onClick={() => onConfirm(id)}>Confirm</Button>
+                <Button onClick={() => onConfirm(aromachemical.id)}>Confirm</Button>
             </div>
         </div >
     );
