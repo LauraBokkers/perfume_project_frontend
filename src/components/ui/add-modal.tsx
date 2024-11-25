@@ -41,7 +41,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
                     className="absolute right-4 top-4 h-4 w-4 cursor-pointer"
                     onClick={() => onClose()}
                 >
-                    <CloseIcon height={14} width={14} fill="white" />
+                    <CloseIcon height={14} width={14} fill="black" />
                 </div>
                 <form
                     onSubmit={(e) => {
