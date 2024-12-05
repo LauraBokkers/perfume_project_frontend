@@ -1,3 +1,4 @@
+import React, { useState } from "react"
 import {
     ColumnDef,
     flexRender,
@@ -16,6 +17,13 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -26,12 +34,30 @@ export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
+
+
+    const [pagination, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 20,
+    })
+
+
     const table = useReactTable({
-        data,
-        columns,
+        data: data,
+        columns: columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        state: { pagination },
+        onPaginationChange: setPagination,
     })
+
+    const handlePageSizeChange = (size: number) => {
+        setPagination((prev) => ({
+            ...prev,
+            pageSize: size,
+        }))
+    }
+
 
     return (
         <div>
@@ -79,23 +105,43 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
+
+            <div className="flex items-center justify-between space-x-2 py-4">
+                {/* Page Size Dropdown */}
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button>{`Change page size (${pagination.pageSize})`}</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {[10, 20, 50, 100].map((size) => (
+                            <DropdownMenuItem key={size} onClick={() => handlePageSizeChange(size)}>
+                                {size}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+
+                {/* Pagination Buttons */}
+                <div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Next
+                    </Button>
+                </div>
+
             </div>
         </div>
     )

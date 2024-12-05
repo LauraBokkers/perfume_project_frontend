@@ -54,10 +54,10 @@ export default {
 					'5': 'hsl(var(--chart-5))'
 				},
 				custom: {
-					accentDark: '#153448',
-					accentLight: '#3C5B6F',
-					background: '#948979',
-					table: '#DFD0B8',
+					accentDark: '#888888',
+					accentLight: '#FFE8DF',
+					background: '#F0F0F0',
+					table: '#FFFFFF',
 				}
 			}
 		}
