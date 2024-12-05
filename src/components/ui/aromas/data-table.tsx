@@ -2,9 +2,11 @@ import { useState } from "react"
 import * as React from "react"
 import {
     ColumnDef,
+    ColumnFiltersState,
     SortingState,
     flexRender,
     getCoreRowModel,
+    getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
@@ -20,6 +22,8 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -46,16 +50,24 @@ export function DataTable<TData, TValue>({
 
     const [sorting, setSorting] = React.useState<SortingState>([])
 
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+        []
+    )
+
 
     const table = useReactTable({
         data: data,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        state: { pagination, sorting },
+        state: {
+            pagination, sorting, columnFilters
+        },
         onPaginationChange: setPagination,
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
     })
 
     const handlePageSizeChange = (size: number) => {
@@ -68,6 +80,16 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
+            <div className="flex items-center py-4">
+                <Input
+                    placeholder="Filter names..."
+                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("name")?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
+            </div>
             <div className="rounded-md border">
                 <Table className="border-custom-accentDark border-4 border-opacity-80 m-8 mx-auto max-w-7xl">
                     <TableHeader className="bg-custom-accentLight">
