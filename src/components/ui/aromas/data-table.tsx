@@ -1,9 +1,12 @@
-import React, { useState } from "react"
+import { useState } from "react"
+import * as React from "react"
 import {
     ColumnDef,
+    SortingState,
     flexRender,
     getCoreRowModel,
     getPaginationRowModel,
+    getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -41,14 +44,18 @@ export function DataTable<TData, TValue>({
         pageSize: 20,
     })
 
+    const [sorting, setSorting] = React.useState<SortingState>([])
+
 
     const table = useReactTable({
         data: data,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        state: { pagination },
+        state: { pagination, sorting },
         onPaginationChange: setPagination,
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
     })
 
     const handlePageSizeChange = (size: number) => {
@@ -113,7 +120,7 @@ export function DataTable<TData, TValue>({
                         <Button>{`Change page size (${pagination.pageSize})`}</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        {[10, 20, 50, 100].map((size) => (
+                        {[10, 20, 30, 40, 50].map((size) => (
                             <DropdownMenuItem key={size} onClick={() => handlePageSizeChange(size)}>
                                 {size}
                             </DropdownMenuItem>
