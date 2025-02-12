@@ -1,5 +1,5 @@
 import { getColumns } from "./aromachemicals-columns";
-import { DataTable } from "../data-table";
+import { DataTable } from "../generic-data-table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from 'zod';
 import { useState } from 'react';
@@ -41,6 +41,7 @@ async function fetchAromachemicals(): Promise<Aromachemical[]> {
         throw error; // re-throw the error for further handling if needed
     }
 }
+
 
 // Function to post a new aromachemical to the API
 async function postAromachemical(newAromachemical: Omit<Aromachemical, 'id'>): Promise<void> {
