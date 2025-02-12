@@ -1,6 +1,6 @@
 
 import { ColumnDef } from "@tanstack/react-table"
-import { type Aromachemical } from "./page"
+import { type Aromachemical } from "./aromachemicals-table"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import { type Dispatch, type SetStateAction } from "react";

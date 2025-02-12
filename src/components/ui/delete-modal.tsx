@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../icons/close-icon";
-import { Aromachemical } from "./aromas/page";
+import { Aromachemical } from "./aromachemicals/aromachemicals-table";
 
 
 interface ModalPropType {

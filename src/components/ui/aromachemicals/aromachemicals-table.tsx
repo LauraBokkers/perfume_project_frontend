@@ -1,5 +1,5 @@
-import { getColumns } from "./columns";
-import { DataTable } from "./data-table";
+import { getColumns } from "./aromachemicals-columns";
+import { DataTable } from "../data-table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from 'zod';
 import { useState } from 'react';
@@ -84,7 +84,7 @@ async function editAromaChemical({ id, name, description }: Aromachemical): Prom
     }
 }
 
-export default function TablePage() {
+export default function AromachemicalsTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [aromachemicalToDelete, setAromachemicalToDelete] = useState<null | Aromachemical>(null);
     const [aromachemicalToEdit, setAromachemicalToEdit] = useState<null | Aromachemical>(null);
