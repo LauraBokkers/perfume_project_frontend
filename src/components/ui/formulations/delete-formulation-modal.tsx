@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import CloseIcon from "../icons/close-icon";
-import { Aromachemical } from "./aromachemicals/aromachemicals-table";
+import CloseIcon from "../../icons/close-icon";
+import { Formulation } from "./formulations-table";
 
 
 interface ModalPropType {
     onClose: () => void;
     onConfirm: (id: number) => void;
-    aromachemical: Aromachemical;
+    formulation: Formulation;
 }
 
-const DeleteModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
+const DeleteModal = ({ onClose, onConfirm, formulation }: ModalPropType) => {
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
             onClose();
@@ -42,9 +42,9 @@ const DeleteModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
                     <CloseIcon height={14} width={14} fill="black" />
                 </div>
                 <div className="flex h-auto max-w-96 flex-col">
-                    <span className="text-black"> Are you sure you want to delete the aromachemical <span className="font-bold">{aromachemical.name}</span>?</span>
+                    <span className="text-black"> Are you sure you want to delete the formulation <span className="font-bold">{formulation.title}</span>?</span>
                 </div>
-                <Button onClick={() => onConfirm(aromachemical.id)}>Confirm <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <Button onClick={() => onConfirm(formulation.id)}>Confirm <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 </Button>

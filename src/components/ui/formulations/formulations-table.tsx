@@ -1,6 +1,13 @@
 import { z } from 'zod';
+import { getColumns } from "./formulations-columns";
 import { DataTable } from "../generic-data-table";
-import { Payment, columns } from "./formulations-columns"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../button";
+import { useState } from 'react';
+import AddModal from "./add-formulation-modal";
+import { toast } from "react-toastify";
+import DeleteModal from './delete-formulation-modal';
+
 
 
 
@@ -16,16 +23,16 @@ const FormulaSchema = z.object({
             }),
             quantity: z.number()
         })
-    ).nullable()
+    ).optional()
 
 });
 
-export type Formula = z.infer<typeof FormulaSchema>
+export type Formulation = z.infer<typeof FormulaSchema>
 
 
 
 // Function to fetch formulas from the API
-async function fetchFormulas(): Promise<Formula[]> {
+async function fetchFormulations(): Promise<Formulation[]> {
     try {
         const response = await fetch('http://localhost:3000/api/formulas');
 
@@ -50,7 +57,7 @@ async function fetchFormulas(): Promise<Formula[]> {
 
 
 // Function to post a new formula to the API
-async function postFormula(newFormula: Omit<Formula, 'id'>): Promise<void> {
+async function postFormulation(newFormula: Omit<Formulation, 'id'>): Promise<void> {
     const response = await fetch('http://localhost:3000/api/formulas', {
         method: 'POST',
         headers: {
@@ -65,7 +72,7 @@ async function postFormula(newFormula: Omit<Formula, 'id'>): Promise<void> {
 }
 
 
-async function deleteFormula(idToBeDeleted: Formula["id"]): Promise<void> {
+async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void> {
     const response = await fetch(`http://localhost:3000/api/formulas/${idToBeDeleted}`, {
         method: 'DELETE',
     });
@@ -76,7 +83,7 @@ async function deleteFormula(idToBeDeleted: Formula["id"]): Promise<void> {
 }
 
 
-async function editFormula({ id, title, formulaLines }: Formula): Promise<void> {
+async function editFormulation({ id, title, formulaLines }: Formulation): Promise<void> {
     const response = await fetch(`http://localhost:3000/api/formulas/${id}`, {
         method: 'PATCH',
         headers: {
@@ -102,12 +109,63 @@ async function editFormula({ id, title, formulaLines }: Formula): Promise<void> 
 
 
 export default function FormulationsTable() {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [formulationToDelete, setFormulationToDelete] = useState<null | Formulation>(null);
+    const [formulationToEdit, setFormulationToEdit] = useState<null | Formulation>(null);
+
+    const queryClient = useQueryClient()
+
+    const { data, error, isLoading, isError } = useQuery({
+        queryKey: ["formulations"],
+        queryFn: () => fetchFormulations(),
+    })
+
+    const newFormulationMutation = useMutation({
+        mutationFn: (newFormulation: Omit<Formulation, 'id'>) => postFormulation(newFormulation),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["formulations"] });
+            toast.success("Successfully added new formulation!")
+        },
+        onError: (error) => {
+            console.error('Failed to add new formulation:', error);
+            toast.error('Error adding new formulation');
+        },
+    });
+
+    const deleteFormulationMutation = useMutation({
+        mutationFn: (idToBeDeleted: Formulation['id']) => deleteFormulation(idToBeDeleted),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["formulations"] });
+            setFormulationToDelete(null);
+            toast.success("Successfully deleted formulation.");
+        },
+        onError: (error) => {
+            console.error('Failed to delete the formulation:', error);
+            toast.error('Error deleting the formulation');
+        },
+    })
 
 
     return (
         <div className="container mx-auto py-10">
-            <h1>Formulations! TEST</h1>
-            <DataTable columns={columns} data={data} />
+            {data && <DataTable
+                columns={getColumns({ handleDeleteFormulation: setFormulationToDelete, handleEditFormulation: setFormulationToEdit })}
+                data={data}
+                searchField='title' />}
+            <Button onClick={() => setIsDialogOpen(true)}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            </Button>
+            {isDialogOpen && <AddModal
+                handleSubmit={newFormulationMutation.mutate}
+                isPending={newFormulationMutation.isPending}
+                onClose={() => setIsDialogOpen(false)} />}
+            {formulationToDelete && (
+                <DeleteModal
+                    formulation={formulationToDelete}
+                    onClose={() => setFormulationToDelete(null)}
+                    onConfirm={deleteFormulationMutation.mutate} />
+            )}
         </div>
 
     )

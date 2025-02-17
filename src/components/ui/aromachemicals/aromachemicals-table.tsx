@@ -3,11 +3,11 @@ import { DataTable } from "../generic-data-table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from 'zod';
 import { useState } from 'react';
-import DeleteModal from "../delete-modal";
-import EditModal from "../edit-modal";
+import DeleteModal from "./delete-aromachemical-modal";
+import EditModal from "./edit-aromachemical-modal";
 import { toast } from "react-toastify";
 import { Button } from "../button";
-import AddModal from "../add-modal";
+import AddModal from "./add-aromachemical-modal";
 
 
 // Define the Zod schema for the Aromachemical type
@@ -124,6 +124,8 @@ export default function AromachemicalsTable() {
         mutationFn: (idToBeDeleted: Aromachemical['id']) => deleteAromaChemical(idToBeDeleted),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["aromachemicals"] });
+            setAromachemicalToDelete(null);
+            toast.success("Successfully deleted aromachemical.");
         },
         onError: (error) => {
             console.error('Failed to delete the aromachemical:', error);
@@ -137,8 +139,9 @@ export default function AromachemicalsTable() {
     return (
         <div className="container mx-auto py-10 bg-custom-table">
             {data && <DataTable
-                columns={getColumns({ handleDeleteRow: setAromachemicalToDelete, handleEditAromachemical: setAromachemicalToEdit })}
-                data={data} />}
+                columns={getColumns({ handleDeleteAromachemical: setAromachemicalToDelete, handleEditAromachemical: setAromachemicalToEdit })}
+                data={data}
+                searchField='name' />}
             <Button onClick={() => setIsDialogOpen(true)}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>

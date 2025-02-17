@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import CloseIcon from "../icons/close-icon";
-import { type Aromachemical } from "./aromachemicals/aromachemicals-table";
+import CloseIcon from "../../icons/close-icon";
+import { Aromachemical } from "./aromachemicals-table";
 
-interface ModalPropType {
+type ModalPropType = {
     onClose: () => void;
-    handleSubmit: ({ ...props }: Aromachemical) => void;
-    aromachemical: Aromachemical;
+    handleSubmit: ({ ...props }: Omit<Aromachemical, "id">) => void;
     isPending: boolean;
 }
 
-const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPropType) => {
-    const [name, setName] = useState<string>(aromachemical.name);
-    const [description, setDescription] = useState(aromachemical.description ?? "");
+function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
@@ -47,7 +46,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit({ id: aromachemical.id, name, description });
+                        handleSubmit({ name, description });
                         onClose();
                     }}
                 >
@@ -76,10 +75,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                         disabled={isPending}
                         className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
-                        Submit <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-
+                        Submit
                     </Button>
                 </form>
             </div>
@@ -87,4 +83,4 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
     );
 };
 
-export default EditModal;
+export default AddModal;
