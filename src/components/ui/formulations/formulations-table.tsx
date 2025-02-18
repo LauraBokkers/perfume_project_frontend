@@ -7,6 +7,7 @@ import { useState } from 'react';
 import AddModal from "./add-formulation-modal";
 import { toast } from "react-toastify";
 import DeleteModal from './delete-formulation-modal';
+import EditModal from './edit-formulation-modal';
 
 
 
@@ -145,6 +146,17 @@ export default function FormulationsTable() {
         },
     })
 
+    const editFormulationMutation = useMutation({
+        mutationFn: (formulation: Formulation) => editFormulation(formulation),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["formulation"] });
+        },
+        onError: (error) => {
+            console.error('Failed to edit the formulation:', error);
+            toast.error('Error editing the formulation');
+        },
+    })
+
 
     return (
         <div className="container mx-auto py-10">
@@ -165,6 +177,15 @@ export default function FormulationsTable() {
                     formulation={formulationToDelete}
                     onClose={() => setFormulationToDelete(null)}
                     onConfirm={deleteFormulationMutation.mutate} />
+            )}
+            {formulationToEdit && (
+                <EditModal
+                    formulation={formulationToEdit}
+                    onClose={() => setFormulationToEdit(null)}
+                    handleSubmit={editFormulationMutation.mutate}
+                    isPending={editFormulationMutation.isPending}
+                />
+
             )}
         </div>
 
