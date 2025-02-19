@@ -8,18 +8,18 @@ import AddModal from "./add-formulation-modal";
 import { toast } from "react-toastify";
 import DeleteModal from './delete-formulation-modal';
 import EditModal from './edit-formulation-modal';
+import ViewModal from './view-formulation-modal';
 
 
 
 
 // Define the Zod schema for the Formula type
-const FormulaSchema = z.object({
+export const FormulaSchema = z.object({
     id: z.number(),
     title: z.string(),
-    formulaLines: z.array(
+    formula_line: z.array(
         z.object({
             aroma_chemical: z.object({
-                id: z.number(),
                 name: z.string()
             }),
             quantity: z.number()
@@ -84,7 +84,7 @@ async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void
 }
 
 
-async function editFormulation({ id, title, formulaLines }: Formulation): Promise<void> {
+async function editFormulation({ id, title, formula_line }: Formulation): Promise<void> {
     const response = await fetch(`http://localhost:3000/api/formulas/${id}`, {
         method: 'PATCH',
         headers: {
@@ -92,8 +92,7 @@ async function editFormulation({ id, title, formulaLines }: Formulation): Promis
         },
         body: JSON.stringify({
             title,
-            formulaLines: formulaLines?.map(line => ({
-                aroma_chemical_id: line.aroma_chemical.id,
+            formula_line: formula_line?.map(line => ({
                 quantity: line.quantity
             }))
 
@@ -113,6 +112,7 @@ export default function FormulationsTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [formulationToDelete, setFormulationToDelete] = useState<null | Formulation>(null);
     const [formulationToEdit, setFormulationToEdit] = useState<null | Formulation>(null);
+    const [formulationId, setFormulationId] = useState<null | Formulation['id']>(null);
 
     const queryClient = useQueryClient()
 
@@ -161,7 +161,7 @@ export default function FormulationsTable() {
     return (
         <div className="container mx-auto py-10">
             {data && <DataTable
-                columns={getColumns({ handleDeleteFormulation: setFormulationToDelete, handleEditFormulation: setFormulationToEdit })}
+                columns={getColumns({ handleDeleteFormulation: setFormulationToDelete, handleViewFormulation: setFormulationId, handleEditFormulation: setFormulationToEdit })}
                 data={data}
                 searchField='title' />}
             <Button onClick={() => setIsDialogOpen(true)}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -178,6 +178,14 @@ export default function FormulationsTable() {
                     onClose={() => setFormulationToDelete(null)}
                     onConfirm={deleteFormulationMutation.mutate} />
             )}
+
+            {formulationId && (
+                <ViewModal
+                    formulationId={formulationId}
+                    onClose={() => setFormulationId(null)}
+                />
+            )}
+
             {formulationToEdit && (
                 <EditModal
                     formulation={formulationToEdit}
@@ -185,8 +193,8 @@ export default function FormulationsTable() {
                     handleSubmit={editFormulationMutation.mutate}
                     isPending={editFormulationMutation.isPending}
                 />
-
             )}
+
         </div>
 
     )
