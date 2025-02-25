@@ -59,6 +59,9 @@ export default {
 					background: '#F0F0F0',
 					table: '#FFFFFF',
 				}
+			},
+			fontFamily: {
+				roboto: ['Roboto', 'sans']
 			}
 		}
 	},

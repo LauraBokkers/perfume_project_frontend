@@ -38,12 +38,16 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     searchField?: string
+    showAddButton?: boolean
+    handleClickAdd: () => void
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    searchField
+    searchField,
+    showAddButton = false,
+    handleClickAdd
 }: DataTableProps<TData, TValue>) {
 
 
@@ -87,7 +91,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4">
+            <div className="flex gap-4 items-center py-4">
                 {searchField && <Input
                     placeholder="Filter names..."
                     value={(table.getColumn(searchField)?.getFilterValue() as string) ?? ""}
@@ -96,13 +100,30 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />}
+                {showAddButton && <Button onClick={handleClickAdd}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                </Button>}
+                {/* Page Size Dropdown */}
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button>{`Change page size (${pagination.pageSize})`}</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white rounded-xl ">
+                        {[10, 20, 30, 40, 50].map((size) => (
+                            <DropdownMenuItem className="cursor-pointer hover:bg-custom-accentLight z-20" key={size} onClick={() => handlePageSizeChange(size)}>
+                                {size}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
                             Show/hide columns
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="bg-white rounded-xl">
                         {table
                             .getAllColumns()
                             .filter(
@@ -112,7 +133,7 @@ export function DataTable<TData, TValue>({
                                 return (
                                     <DropdownMenuCheckboxItem
                                         key={column.id}
-                                        className="capitalize"
+                                        className="capitalize cursor-pointer hover:bg-custom-accentLight z-10"
                                         checked={column.getIsVisible()}
                                         onCheckedChange={(value) =>
                                             column.toggleVisibility(!!value)
@@ -125,8 +146,38 @@ export function DataTable<TData, TValue>({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border">
-                <Table className="border-custom-accentDark border-4 border-opacity-80 m-8 mx-auto max-w-7xl">
+            <div className="w-full flex items-center justify-center my-4">
+                {/* Pagination Buttons */}
+                <div className="flex flex-row justify-evenly w-full">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                        className="border-none rounded-full h-8 w-8 bg-gray-500 bg-opacity-5"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                        className="border-none rounded-full h-8 w-8 bg-gray-500 bg-opacity-5"
+
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+
+                    </Button>
+                </div>
+            </div>
+            <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
+                <Table className="mx-auto max-w-7xl">
                     <TableHeader className="bg-custom-accentLight">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
@@ -169,43 +220,35 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-
-            <div className="flex items-center justify-between space-x-2 py-4">
-                {/* Page Size Dropdown */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button>{`Change page size (${pagination.pageSize})`}</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        {[10, 20, 30, 40, 50].map((size) => (
-                            <DropdownMenuItem key={size} onClick={() => handlePageSizeChange(size)}>
-                                {size}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-
+            <div className="w-full flex items-center justify-center my-4">
                 {/* Pagination Buttons */}
-                <div>
+                <div className="flex flex-row justify-evenly w-full">
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
+                        className="border-none rounded-full h-8 w-8 bg-gray-500 bg-opacity-5"
                     >
-                        Previous
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+
                     </Button>
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
+                        className="border-none rounded-full h-8 w-8 bg-gray-500 bg-opacity-5"
+
                     >
-                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+
                     </Button>
                 </div>
-
             </div>
         </div>
     )
