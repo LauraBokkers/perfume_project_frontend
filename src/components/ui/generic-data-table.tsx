@@ -98,16 +98,16 @@ export function DataTable<TData, TValue>({
                     onChange={(event) =>
                         table.getColumn(searchField)?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-sm rounded-xl border-black border-opacity-50"
                 />}
-                {showAddButton && <Button onClick={handleClickAdd}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                {showAddButton && <Button className='rounded-xl' onClick={handleClickAdd}> Add<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 </Button>}
                 {/* Page Size Dropdown */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button>{`Change page size (${pagination.pageSize})`}</Button>
+                        <Button className="rounded-xl">{`Change page size (${pagination.pageSize})`}</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-white rounded-xl ">
                         {[10, 20, 30, 40, 50].map((size) => (
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
                 </DropdownMenu>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
+                        <Button className="ml-auto rounded-xl">
                             Show/hide columns
                         </Button>
                     </DropdownMenuTrigger>
@@ -183,7 +183,7 @@ export function DataTable<TData, TValue>({
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id}>
+                                        <TableHead key={header.id} style={{ width: `${header.getSize()}px` }}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(

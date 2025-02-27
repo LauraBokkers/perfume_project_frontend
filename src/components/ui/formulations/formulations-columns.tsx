@@ -38,7 +38,7 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
             header: "",
             cell: ({ cell }) => {
                 return (
-                    <Button className="bg-red-600 bg-opacity-60 rounded-lg" onClick={(e) => {
+                    <Button className="bg-red-600 bg-opacity-60 rounded-2xl" onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteFormulation(cell.row.original)
                     }}>
@@ -54,7 +54,7 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
             header: "",
             cell: ({ cell }) => {
                 return (
-                    <Button className="bg-custom-accentLight bg-opacity-60 rounded-lg" onClick={(e) => {
+                    <Button className="bg-custom-accentLight bg-opacity-60 rounded-2xl" onClick={(e) => {
                         e.stopPropagation();
                         handleViewFormulation(cell.row.original.id)
                     }}>
@@ -71,7 +71,7 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
             header: "",
             cell: ({ cell }) => {
                 return (
-                    <Button className="bg-custom-accentLight bg-opacity-70" onClick={(e) => {
+                    <Button className="bg-custom-accentLight bg-opacity-70 rounded-2xl" onClick={(e) => {
                         e.stopPropagation();
                         handleEditFormulation(cell.row.original)
                     }}>

@@ -4,7 +4,7 @@ import { type Aromachemical } from "./aromachemicals-table"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import { type Dispatch, type SetStateAction } from "react";
-
+import { useState } from "react";
 
 
 type ColumnProps = {
@@ -30,17 +30,35 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                     </Button>
                 )
             },
+            cell: ({ row }) => {
+                const [isExpanded, setIsExpanded] = useState(false);
+                return (
+                    <div
+                        className={`w-[100px] cursor-pointer ${isExpanded ? "whitespace-normal" : "truncate"}`}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    >
+                        {row.original.name}
+                    </div>
+                );
+            },
+            size: 100,
+            minSize: 100,
+            maxSize: 200,
         },
         {
             accessorKey: "description",
             header: "Description",
+            cell: ({ row }) => <div className="w-[100px]">{row.original.description}</div>,
+            size: 300,
+            minSize: 200,
+            maxSize: 400,
         },
         {
             accessorKey: "delete",
             header: "",
             cell: ({ cell }) => {
                 return (
-                    <Button className="bg-red-600 bg-opacity-60 rounded-lg" onClick={(e) => {
+                    <Button className="bg-red-600 bg-opacity-60 rounded-2xl" onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteAromachemical(cell.row.original)
                     }}>
@@ -50,14 +68,17 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
 
                     </Button>
                 )
-            }
+            },
+            size: 10,
+            minSize: 10,
+            maxSize: 50,
         },
         {
             accessorKey: "edit",
             header: "",
             cell: ({ cell }) => {
                 return (
-                    <Button className="bg-custom-accentLight bg-opacity-70" onClick={(e) => {
+                    <Button className="bg-custom-accentLight bg-opacity-70 rounded-2xl" onClick={(e) => {
                         e.stopPropagation();
                         handleEditAromachemical(cell.row.original)
                     }}>
@@ -66,7 +87,10 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                         </svg>
                     </Button>
                 )
-            }
+            },
+            size: 10,
+            minSize: 10,
+            maxSize: 50,
         }
     ]
     return columns
