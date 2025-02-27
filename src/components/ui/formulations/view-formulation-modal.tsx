@@ -72,30 +72,38 @@ const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
                 >
                     <CloseIcon height={14} width={14} fill="black" />
                 </div>
-                {data && <div className="space-y-4 bg-white">
-                    <h2 className="text-xl font-bold">Formula Details</h2>
-                    <p className="text-lg font-semibold">{data.title}</p>
-                    <table className="w-full border-collapse border border-gray-200">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="border border-gray-300 px-4 py-2 text-left">Aroma Chemical</th>
-                                <th className="border border-gray-300 px-4 py-2 text-left">Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data.formula_line?.map((line, idx) => (
-                                <tr key={idx} className="border-t">
-                                    <td className="border border-gray-300 px-4 py-2">{line.aroma_chemical.name}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{line.quantity}</td>
+                {data && <div>
+                    <div className="flex-col flex gap-2 py-2">
+                        <h2 className="text-xl font-bold">Formula Details</h2>
+                        <p className="text-lg font-semibold">{data.title}</p>
+                    </div>
+                    <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
+                        <table>
+                            <thead className="bg-custom-accentLight">
+                                <tr>
+                                    <th className="px-4 py-2 text-left">Aroma Chemical</th>
+                                    <th className="px-4 py-2 text-left">Quantity</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>}
-            </div>
+                            </thead>
+                            <tbody>
+                                {data.formula_line?.map((line, idx) => (
+                                    <tr key={idx}>
+                                        <td className="border px-4 py-2">{line.aroma_chemical.name}</td>
+                                        <td className="border px-4 py-2">{line.quantity}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
+
+                }
+            </div>
         </div >
     );
 };
 
-export default ViewModal; 
+export default ViewModal;
+
+
