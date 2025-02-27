@@ -34,7 +34,7 @@ const EditModal = ({ onClose, handleSubmit, formulation, isPending }: ModalPropT
             onClick={() => onClose()}
         >
             <div
-                className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-md bg-white px-10 py-8"
+                className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-xl bg-white px-10 py-8"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
@@ -50,7 +50,7 @@ const EditModal = ({ onClose, handleSubmit, formulation, isPending }: ModalPropT
                         onClose();
                     }}
                 >
-                    <div>
+                    <div className='py-4'>
                         <label htmlFor="name" className="block mb-1">Name:</label>
                         <input
                             id="name"
@@ -64,7 +64,7 @@ const EditModal = ({ onClose, handleSubmit, formulation, isPending }: ModalPropT
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        className="bg-custom-accentLight hover:bg-custom-background text-black py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
                         Submit <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />

@@ -63,7 +63,7 @@ const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
             onClick={() => onClose()}
         >
             <div
-                className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-md bg-white px-10 py-8"
+                className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-xl bg-white px-10 py-8"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div
