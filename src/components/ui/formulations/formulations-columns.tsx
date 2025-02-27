@@ -32,6 +32,9 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
                     </Button>
                 )
             },
+            size: 500,
+            minSize: 200,
+            maxSize: 500
         },
         {
             accessorKey: "delete",
@@ -47,7 +50,10 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
                         </svg>
                     </Button>
                 )
-            }
+            },
+            size: 10,
+            minSize: 10,
+            maxSize: 50,
         },
         {
             accessorKey: "view",
@@ -64,7 +70,10 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
                         </svg>
                     </Button>
                 )
-            }
+            },
+            size: 10,
+            minSize: 10,
+            maxSize: 50,
         },
         {
             accessorKey: "edit",
@@ -80,7 +89,10 @@ export function getColumns({ handleDeleteFormulation, handleViewFormulation, han
                         </svg>
                     </Button>
                 )
-            }
+            },
+            size: 10,
+            minSize: 10,
+            maxSize: 50,
         }
     ]
     return columns
