@@ -79,6 +79,9 @@ export function DataTable<TData, TValue>({
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+
+        columnResizeMode: "onChange",
+        enableColumnResizing: true,
     })
 
     const handlePageSizeChange = (size: number) => {
@@ -176,14 +179,17 @@ export function DataTable<TData, TValue>({
                     </Button>
                 </div>
             </div>
-            <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
-                <Table className="mx-auto max-w-7xl">
+            <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden w-full">
+
+                <Table className="mx-auto w-full table-fixed">
+
                     <TableHeader className="bg-custom-accentLight">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead key={header.id} style={{ width: `${header.getSize()}px` }}>
+                                        <TableHead key={header.id} className="border-2 border-custom-background" style={{ width: header.column.getSize() ? `${header.column.getSize()}px` : "auto" }}>
+
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
