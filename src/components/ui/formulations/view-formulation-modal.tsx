@@ -1,36 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { FormulaSchema, type Formulation } from "./formulations-table";
+import { fetchFormulationById, FormulaSchema, type Formulation } from "./formulations-table";
 import { useQuery } from "@tanstack/react-query";
 
 interface ViewModalPropType {
     onClose: () => void;
     formulationId: Formulation['id'];
-}
-
-
-// Function to fetch specific formulation by id from the API
-async function fetchFormulationById(id: Formulation['id']): Promise<Formulation> {
-    try {
-        const response = await fetch(`http://localhost:3000/api/formulas/get-formula-by-id/${id}`);
-
-        // Check if the response is OK (status in the range 200-299)
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-
-        // Parse the response as JSON
-        const data = await response.json();
-
-        // Validate the response with Zod
-        const validatedData = FormulaSchema.parse(data);
-
-        return validatedData;
-    } catch (error) {
-        console.error('Failed to fetch formula:', error);
-        throw error; // re-throw the error for further handling if needed
-    }
 }
 
 
@@ -105,5 +81,6 @@ const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
 };
 
 export default ViewModal;
+
 
 

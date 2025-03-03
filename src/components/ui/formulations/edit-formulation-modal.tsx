@@ -1,30 +1,66 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { type Formulation } from "./formulations-table";
+import { type Formulation, fetchFormulationById, FormulaSchema } from "./formulations-table";
+import { useQuery } from "@tanstack/react-query";
 
-interface ModalPropType {
+interface EditModalPropType {
     onClose: () => void;
     handleSubmit: ({ ...props }: Formulation) => void;
-    formulation: Formulation;
-    isPending: boolean;
+    formulationId: Formulation['id'];
 }
 
-const EditModal = ({ onClose, handleSubmit, formulation, isPending }: ModalPropType) => {
-    const [title, setTitle] = useState<string>(formulation.title);
+const EditModal = ({ onClose, formulationId }: EditModalPropType) => {
+    const { data, error, isLoading, isError } = useQuery({
+        queryKey: ["formulation", formulationId],
+        queryFn: () => fetchFormulationById(formulationId),
+    })
 
+    const [title, setTitle] = useState<string>();
+    const [formulaLines, setFormulaLines] = useState<Formulation["formula_line"]>();
+
+    // Closing modal with keyboard
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
             onClose();
         }
     }
 
+    function handleEditFormulaLines(id: number, quantity: number) {
+        setFormulaLines((prev) => {
+            return prev?.map((line) => {
+                if (line.aroma_chemical.id === id) {
+                    return {
+                        ...line,
+                        quantity
+                    }
+                }
+
+                return line;
+            })
+        })
+    }
+
+    function handleDeleteFormulaLines(id: number) {
+        setFormulaLines((prev) => {
+            return prev?.filter((line) => {
+                return line.aroma_chemical.id !== id;
+            })
+        })
+    }
+
+    useEffect(() => {
+        if (data) {
+            setTitle(data.title)
+            setFormulaLines(data.formula_line)
+        }
+    }, [data?.title, data?.formula_line])
+
     useEffect(() => {
         document.body.addEventListener("keydown", handleKeyDown);
         return () => {
             document.body.removeEventListener("keydown", handleKeyDown);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -43,38 +79,67 @@ const EditModal = ({ onClose, handleSubmit, formulation, isPending }: ModalPropT
                 >
                     <CloseIcon height={14} width={14} fill="black" />
                 </div>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit({ id: formulation.id, title });
-                        onClose();
-                    }}
-                >
-                    <div className='py-4'>
-                        <label htmlFor="name" className="block mb-1">Name:</label>
-                        <input
-                            id="name"
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                            className="border border-gray-300 rounded px-3 py-1"
-                        />
+                {data && <div>
+                    <div className="flex-col flex gap-2 py-2">
+                        <h2 className="text-xl font-bold">Formula Details</h2>
+                        <div className='py-4'>
+                            <label htmlFor="name" className="block mb-1">Name:</label>
+                            <input
+                                id="name"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                                className="border border-gray-300 rounded px-3 py-1"
+                            />
+                        </div>
                     </div>
-                    <Button
-                        type="submit"
-                        disabled={isPending}
-                        className="bg-custom-accentLight hover:bg-custom-background text-black py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    >
-                        Submit <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
+                    <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
+                        <table>
+                            <thead className="bg-custom-accentLight">
+                                <tr>
+                                    <th className="px-4 py-2 text-left">Aroma Chemical</th>
+                                    <th className="px-4 py-2 text-left">Quantity</th>
+                                    <th className="px-4 py-2 text-left"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {formulaLines?.map((line, idx) => (
+                                    <tr key={idx}>
+                                        <td className="border px-4 py-2">{line.aroma_chemical.name}</td>
+                                        <td className="border px-4 py-2">
+                                            <input
+                                                id="quantity"
+                                                type="number"
+                                                min={1}
+                                                value={line.quantity}
+                                                onChange={(e) => handleEditFormulaLines(line.aroma_chemical.id, Number(e.target.value))}
+                                                required
+                                                className="border border-gray-300 rounded px-3 py-1 "
+                                            />
+                                        </td>
+                                        <td className="border px-4 py-2">
+                                            <Button className="bg-red-600 bg-opacity-60 rounded-2xl" onClick={() => {
+                                                handleDeleteFormulaLines(line.aroma_chemical.id)
+                                            }}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                </svg>
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                    </Button>
-                </form>
+
+                }
             </div>
         </div >
     );
 };
 
 export default EditModal;
+

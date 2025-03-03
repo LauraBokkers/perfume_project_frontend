@@ -20,6 +20,7 @@ export const FormulaSchema = z.object({
     formula_line: z.array(
         z.object({
             aroma_chemical: z.object({
+                id: z.number(),
                 name: z.string()
             }),
             quantity: z.number()
@@ -30,6 +31,28 @@ export const FormulaSchema = z.object({
 
 export type Formulation = z.infer<typeof FormulaSchema>
 
+// Function to fetch specific formulation by id from the API
+export async function fetchFormulationById(id: Formulation['id']): Promise<Formulation> {
+    try {
+        const response = await fetch(`http://localhost:3000/api/formulas/get-formula-by-id/${id}`);
+
+        // Check if the response is OK (status in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        // Parse the response as JSON
+        const data = await response.json();
+
+        // Validate the response with Zod
+        const validatedData = FormulaSchema.parse(data);
+
+        return validatedData;
+    } catch (error) {
+        console.error('Failed to fetch formula:', error);
+        throw error; // re-throw the error for further handling if needed
+    }
+}
 
 
 // Function to fetch formulas from the API
@@ -111,7 +134,7 @@ async function editFormulation({ id, title, formula_line }: Formulation): Promis
 export default function FormulationsTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [formulationToDelete, setFormulationToDelete] = useState<null | Formulation>(null);
-    const [formulationToEdit, setFormulationToEdit] = useState<null | Formulation>(null);
+    const [formulationToEdit, setFormulationToEdit] = useState<null | Formulation['id']>(null);
     const [formulationId, setFormulationId] = useState<null | Formulation['id']>(null);
 
     const queryClient = useQueryClient()
@@ -184,13 +207,11 @@ export default function FormulationsTable() {
                     onClose={() => setFormulationId(null)}
                 />
             )}
-
             {formulationToEdit && (
                 <EditModal
-                    formulation={formulationToEdit}
                     onClose={() => setFormulationToEdit(null)}
                     handleSubmit={editFormulationMutation.mutate}
-                    isPending={editFormulationMutation.isPending}
+                    formulationId={formulationToEdit}
                 />
             )}
 
