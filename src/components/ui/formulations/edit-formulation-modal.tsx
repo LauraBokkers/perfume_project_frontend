@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
 import { type Formulation, fetchFormulationById } from "./formulations-table";
 import { useQuery } from "@tanstack/react-query";
+import AddFormulalinesModal from './add-formulalines-modal';
 
 
 interface EditModalPropType {
@@ -19,6 +20,8 @@ const EditModal = ({ onClose, formulationId, handleSubmit }: EditModalPropType) 
 
     const [title, setTitle] = useState<string>("");
     const [formulaLines, setFormulaLines] = useState<Formulation["formula_line"]>([]);
+    const [isAddFormulalinesModalOpen, setIsAddFormulalinesModalOpen] = useState(false);
+
 
     // Closing modal with keyboard
     function handleKeyDown(e: KeyboardEvent) {
@@ -85,14 +88,31 @@ const EditModal = ({ onClose, formulationId, handleSubmit }: EditModalPropType) 
                         <h2 className="text-xl font-bold">Formula Details</h2>
                         <div className='py-4'>
                             <label htmlFor="name" className="block mb-1">Name:</label>
-                            <input
-                                id="name"
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                required
-                                className="border border-gray-300 rounded px-3 py-1"
-                            />
+                            <div className="flex justify-between items-center">
+                                <input
+                                    id="name"
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    required
+                                    className="border border-gray-300 rounded px-3 py-1"
+                                />
+                                <Button onClick={() => setIsAddFormulalinesModalOpen(true)}
+                                    className="bg-custom-accentLight bg-opacity-70 rounded-2xl">
+                                    Add aromachemical(s) <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </Button>
+                                {isAddFormulalinesModalOpen && (
+                                    <AddFormulalinesModal
+                                        onClose={() => setIsAddFormulalinesModalOpen(false)}
+                                        onConfirm={() => {
+                                            console.log('clicked');
+                                            setIsAddFormulalinesModalOpen(false);
+                                        }}
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">

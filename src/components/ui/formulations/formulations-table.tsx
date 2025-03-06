@@ -161,8 +161,8 @@ export default function FormulationsTable() {
         mutationFn: (formulation: Formulation) => editFormulation(formulation),
         onSuccess: () => {
             setFormulationToEdit(null)
-            queryClient.invalidateQueries({ queryKey: ["formulation"] });
-            toast.success("Successfully editted formulation.");
+            queryClient.invalidateQueries({ queryKey: ["formulations"] });
+            toast.success("Successfully edited formulation.");
         },
         onError: (error) => {
             console.error('Failed to edit the formulation:', error);
