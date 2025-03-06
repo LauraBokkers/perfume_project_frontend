@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { type Formulation, fetchFormulationById, FormulaSchema } from "./formulations-table";
+import { type Formulation, fetchFormulationById } from "./formulations-table";
 import { useQuery } from "@tanstack/react-query";
+
 
 interface EditModalPropType {
     onClose: () => void;
@@ -10,14 +11,14 @@ interface EditModalPropType {
     formulationId: Formulation['id'];
 }
 
-const EditModal = ({ onClose, formulationId }: EditModalPropType) => {
-    const { data, error, isLoading, isError } = useQuery({
+const EditModal = ({ onClose, formulationId, handleSubmit }: EditModalPropType) => {
+    const { data } = useQuery({
         queryKey: ["formulation", formulationId],
         queryFn: () => fetchFormulationById(formulationId),
     })
 
-    const [title, setTitle] = useState<string>();
-    const [formulaLines, setFormulaLines] = useState<Formulation["formula_line"]>();
+    const [title, setTitle] = useState<string>("");
+    const [formulaLines, setFormulaLines] = useState<Formulation["formula_line"]>([]);
 
     // Closing modal with keyboard
     function handleKeyDown(e: KeyboardEvent) {
@@ -132,6 +133,18 @@ const EditModal = ({ onClose, formulationId }: EditModalPropType) => {
                             </tbody>
                         </table>
                     </div>
+                    <Button
+                        type="submit"
+                        onClick={() => handleSubmit({
+                            id: formulationId, title, formula_line: formulaLines
+                        })}
+                        className="bg-custom-accentLight hover:bg-green-200 text-black mt-4 py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Submit changes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+
+                    </Button>
                 </div>
 
 

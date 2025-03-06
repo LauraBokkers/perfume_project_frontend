@@ -2,16 +2,12 @@ import { z } from 'zod';
 import { getColumns } from "./formulations-columns";
 import { DataTable } from "../generic-data-table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "../button";
 import { useState } from 'react';
 import AddModal from "./add-formulation-modal";
 import { toast } from "react-toastify";
 import DeleteModal from './delete-formulation-modal';
 import EditModal from './edit-formulation-modal';
 import ViewModal from './view-formulation-modal';
-
-
-
 
 // Define the Zod schema for the Formula type
 export const FormulaSchema = z.object({
@@ -54,7 +50,6 @@ export async function fetchFormulationById(id: Formulation['id']): Promise<Formu
     }
 }
 
-
 // Function to fetch formulas from the API
 async function fetchFormulations(): Promise<Formulation[]> {
     try {
@@ -78,8 +73,6 @@ async function fetchFormulations(): Promise<Formulation[]> {
     }
 }
 
-
-
 // Function to post a new formula to the API
 async function postFormulation(newFormula: Omit<Formulation, 'id'>): Promise<void> {
     const response = await fetch('http://localhost:3000/api/formulas', {
@@ -95,7 +88,6 @@ async function postFormulation(newFormula: Omit<Formulation, 'id'>): Promise<voi
     }
 }
 
-
 async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void> {
     const response = await fetch(`http://localhost:3000/api/formulas/${idToBeDeleted}`, {
         method: 'DELETE',
@@ -106,16 +98,16 @@ async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void
     }
 }
 
-
-async function editFormulation({ id, title, formula_line }: Formulation): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/formulas/${id}`, {
+async function editFormulation(updatedFormulation: Formulation): Promise<void> {
+    const response = await fetch(`http://localhost:3000/api/formulas/${updatedFormulation.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            title,
-            formula_line: formula_line?.map(line => ({
+            title: updatedFormulation.title,
+            formulaLines: updatedFormulation.formula_line?.map(line => ({
+                aroma_chemical_id: line.aroma_chemical.id,
                 quantity: line.quantity
             }))
 
@@ -127,10 +119,6 @@ async function editFormulation({ id, title, formula_line }: Formulation): Promis
     }
 }
 
-
-
-
-
 export default function FormulationsTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [formulationToDelete, setFormulationToDelete] = useState<null | Formulation>(null);
@@ -139,7 +127,7 @@ export default function FormulationsTable() {
 
     const queryClient = useQueryClient()
 
-    const { data, error, isLoading, isError } = useQuery({
+    const { data } = useQuery({
         queryKey: ["formulations"],
         queryFn: () => fetchFormulations(),
     })
@@ -172,14 +160,15 @@ export default function FormulationsTable() {
     const editFormulationMutation = useMutation({
         mutationFn: (formulation: Formulation) => editFormulation(formulation),
         onSuccess: () => {
+            setFormulationToEdit(null)
             queryClient.invalidateQueries({ queryKey: ["formulation"] });
+            toast.success("Successfully editted formulation.");
         },
         onError: (error) => {
             console.error('Failed to edit the formulation:', error);
             toast.error('Error editing the formulation');
         },
     })
-
 
     return (
         <div className="p-10 bg-custom-table rounded-xl">
