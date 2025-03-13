@@ -6,16 +6,37 @@ import { useState } from 'react';
 import DeleteModal from "./delete-aromachemical-modal";
 import EditModal from "./edit-aromachemical-modal";
 import { toast } from "react-toastify";
-import { Button } from "../button";
 import AddModal from "./add-aromachemical-modal";
 
 
-// Define the Zod schema for the Aromachemical type
+
+// Define Enums
+const OdorStrengthEnum = z.enum(["Very_weak", "Weak", "Medium", "Strong", "Very_strong"]);
+const SupplierEnum = z.enum(["IFF", "Firmenich", "Symrise", "Givaudan", "Hekserij"]);
+const PersistenceEnum = z.enum(["Top", "High", "Middle", "Bottom", "Base"]);
+const SolventEnum = z.enum(["DPG", "Perfumers_alcohol", "IPM"]);
+
+// Define ScentCategory Schema
+const ScentCategorySchema = z.object({
+    category: z.string()
+});
+
+
+// Define Aromachemical Schema
 const AromachemicalSchema = z.object({
     id: z.number(),
     name: z.string(),
+    scent_category: z.array(ScentCategorySchema),
+    odor_strength: OdorStrengthEnum.nullable(),
+    persistence: PersistenceEnum.nullable(),
+    dilution_material: SolventEnum.nullable(),
     description: z.string().nullable(),
+    IFRA_limit: z.string().nullable(),
+    supplier: SupplierEnum.nullable(),
 });
+
+
+
 
 export type Aromachemical = z.infer<typeof AromachemicalSchema>
 
@@ -31,6 +52,7 @@ async function fetchAromachemicals(): Promise<Aromachemical[]> {
 
         // Parse the response as JSON
         const data = await response.json();
+        console.log(data);
 
         // Validate the response with Zod
         const validatedData = AromachemicalSchema.array().parse(data);

@@ -105,6 +105,7 @@ const EditModal = ({ onClose, formulationId, handleSubmit }: EditModalPropType) 
                                 </Button>
                                 {isAddFormulalinesModalOpen && (
                                     <AddFormulalinesModal
+                                        existingFormulaLines={formulaLines}
                                         onClose={() => setIsAddFormulalinesModalOpen(false)}
                                         onConfirm={() => {
                                             console.log('clicked');

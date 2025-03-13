@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
+import { Formulation } from "./formulations-table";
 
 
 interface ModalPropType {
+    existingFormulaLines: Formulation["formula_line"];
     onClose: () => void;
     onConfirm: () => void;
 }
 
-const AddFormulalinesModal = ({ onClose, onConfirm }: ModalPropType) => {
+const AddFormulalinesModal = ({ existingFormulaLines, onClose, onConfirm }: ModalPropType) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
@@ -39,9 +41,9 @@ const AddFormulalinesModal = ({ onClose, onConfirm }: ModalPropType) => {
                     <CloseIcon className="fill-black hover:fill-red-600 transition-colors duration-200 cursor-pointer" height={14} width={14} />
                 </div>
                 <div className="flex h-auto max-w-96 flex-col">
-                    <h2>Add formulalines</h2>
+                    <h2>Add formulalines!!</h2>
                 </div>
-                <Button onClick={onConfirm} className='bg-custom-accentLight hover:bg-red-600 hover:bg-opacity-70 rounded-xl'>
+                <Button onClick={onConfirm} className='bg-custom-accentLight hover:bg-green-200 hover:bg-opacity-70 rounded-xl'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>

@@ -49,6 +49,48 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
             cell: ({ row }) => <div>{row.original.description}</div>,
         },
         {
+            accessorKey: "scent_category",
+            header: "Scent Category",
+            cell: ({ row }) => <div>{row.original.scent_category.map(c => c.category).join(", ")}</div>,
+            maxSize: 80,
+            size: 50
+        },
+        {
+            accessorKey: "odor_strength",
+            header: "Odor Strength",
+            cell: ({ row }) => <div>{row.original.odor_strength}</div>,
+            maxSize: 50,
+            size: 40
+        },
+        {
+            accessorKey: "persistence",
+            header: "Persistence",
+            cell: ({ row }) => <div>{row.original.persistence}</div>,
+            maxSize: 50,
+            size: 40
+        },
+        {
+            accessorKey: "supplier",
+            header: "Supplier",
+            cell: ({ row }) => <div>{row.original.supplier}</div>,
+            maxSize: 50,
+            size: 40
+        },
+        {
+            accessorKey: "dilution_material",
+            header: "Dilution Material",
+            cell: ({ row }) => <div>{row.original.dilution_material}</div>,
+            maxSize: 50,
+            size: 45
+        },
+        {
+            accessorKey: "IFRA_limit",
+            header: "IFRA Limit",
+            cell: ({ row }) => <div>{row.original.IFRA_limit}</div>,
+            maxSize: 50,
+            size: 50
+        },
+        {
             accessorKey: "delete",
             header: "",
             cell: ({ cell }) => {
@@ -67,7 +109,7 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                 )
             },
             maxSize: 50,
-            size: 15
+            size: 20
         },
         {
             accessorKey: "edit",
@@ -87,7 +129,7 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                 )
             },
             maxSize: 50,
-            size: 15
+            size: 20
         }
     ]
     return columns
