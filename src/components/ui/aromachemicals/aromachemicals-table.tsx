@@ -23,14 +23,14 @@ const ScentCategorySchema = z.object({
 
 
 // Define Aromachemical Schema
-const AromachemicalSchema = z.object({
+export const AromachemicalSchema = z.object({
     id: z.number(),
-    name: z.string(),
+    name: z.string().min(3, "Naam moet minimaal 3 karakters hebben.").max(50, "Naam mag niet langer zijn dan 50 karakters."),
     scent_category: z.array(ScentCategorySchema),
     odor_strength: OdorStrengthEnum.nullable(),
     persistence: PersistenceEnum.nullable(),
     dilution_material: SolventEnum.nullable(),
-    description: z.string().nullable(),
+    description: z.string().max(1000, "Beschrijving mag niet langer zijn dan 1000 karakters.").nullable(),
     IFRA_limit: z.string().nullable(),
     supplier: SupplierEnum.nullable(),
 });
@@ -168,7 +168,7 @@ export default function AromachemicalsTable() {
                 showAddButton />}
 
             {isDialogOpen && <AddModal
-                handleSubmit={newAromaChemicalMutation.mutate}
+                onAddAromachemical={newAromaChemicalMutation.mutate}
                 isPending={newAromaChemicalMutation.isPending}
                 onClose={() => setIsDialogOpen(false)} />}
             {aromachemicalToDelete && (

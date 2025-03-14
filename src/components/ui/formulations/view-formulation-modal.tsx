@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import CloseIcon from "../../icons/close-icon";
-import { fetchFormulationById, FormulaSchema, type Formulation } from "./formulations-table";
+import { fetchFormulationById, type Formulation } from "./formulations-table";
 import { useQuery } from "@tanstack/react-query";
 
 interface ViewModalPropType {
