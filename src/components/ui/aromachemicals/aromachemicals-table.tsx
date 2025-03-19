@@ -17,7 +17,8 @@ const PersistenceEnum = z.enum(["Top", "High", "Middle", "Bottom", "Base"]);
 const SolventEnum = z.enum(["DPG", "Perfumers_alcohol", "IPM"]);
 
 // Define ScentCategory Schema
-const ScentCategorySchema = z.object({
+export const ScentCategorySchema = z.object({
+    id: z.number(),
     category: z.string()
 });
 

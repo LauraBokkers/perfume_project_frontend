@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
 import { Aromachemical, AromachemicalSchema } from "./aromachemicals-table";
+import ScentCategoryModal from "./select-scent-category-modal";
 
 function ErrorLabel({ message }: { message: string }) {
     return <div className="text-xs text-red-600">{message}</div>
@@ -26,6 +27,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
         name?: string;
         description?: string;
     } | null>(null)
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
@@ -111,17 +113,17 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 />
                             </div>
                             {errors?.description && <ErrorLabel message={errors.description} />}
-                            <div>
-                                <label htmlFor="scent_category" className="mt-2 mb-2 block">Scent Categorie(s):</label>
-
-                                <input
-                                    type='text'
-                                    id="scent_category"
-                                    value={scentCategory}
-                                    onChange={(e) => setScentCategory(e.target.value)}
-                                    className="border border-gray-300 rounded px-3 py-2 w-full resize-y mb-4"
-                                />
+                            <div className="flex items-center gap-4 mb-10 mt-4">
+                                <label htmlFor="scent_category" className="whitespace-nowrap">Scent Categorie(s):</label>
+                                <Button
+                                    onClick={() => setIsModalOpen(true)}
+                                    type="button"
+                                    className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                > Select scent category('s)
+                                </Button>
+                                {isModalOpen && <ScentCategoryModal onClose={() => setIsModalOpen(false)} />}
                             </div>
+
                             <div>
                                 <label htmlFor="odor_strength" className="mt-2 mb-2 block">Odor Strength:</label>
                                 <select
