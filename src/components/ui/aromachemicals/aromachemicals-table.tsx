@@ -11,10 +11,15 @@ import AddModal from "./add-aromachemical-modal";
 
 
 // Define Enums
-const OdorStrengthEnum = z.enum(["Very_weak", "Weak", "Medium", "Strong", "Very_strong"]);
-const SupplierEnum = z.enum(["IFF", "Firmenich", "Symrise", "Givaudan", "Hekserij"]);
-const PersistenceEnum = z.enum(["Top", "High", "Middle", "Bottom", "Base"]);
-const SolventEnum = z.enum(["DPG", "Perfumers_alcohol", "IPM"]);
+export const OdorStrengthSchema = z.enum(["Undefined", "Very_weak", "Weak", "Medium", "Strong", "Very_strong"]);
+export const SupplierSchema = z.enum(["Undefined", "IFF", "Firmenich", "Symrise", "Givaudan", "Hekserij"]);
+export const PersistenceSchema = z.enum(["Undefined", "Top", "High", "Middle", "Bottom", "Base"]);
+export const SolventSchema = z.enum(["Undefined", "DPG", "Perfumers_alcohol", "IPM"]);
+
+export type OdorStrength = z.infer<typeof OdorStrengthSchema>
+export type Supplier = z.infer<typeof SupplierSchema>
+export type Persistence = z.infer<typeof PersistenceSchema>
+export type Solvent = z.infer<typeof SolventSchema>
 
 // Define ScentCategory Schema
 export const ScentCategorySchema = z.object({
@@ -24,20 +29,20 @@ export const ScentCategorySchema = z.object({
 
 
 // Define Aromachemical Schema
-export const AromachemicalSchema = z.object({
-    id: z.number(),
+export const AddAromachemicalSchema = z.object({
     name: z.string().min(3, "Naam moet minimaal 3 karakters hebben.").max(50, "Naam mag niet langer zijn dan 50 karakters."),
     scent_category: z.array(ScentCategorySchema),
-    odor_strength: OdorStrengthEnum.nullable(),
-    persistence: PersistenceEnum.nullable(),
-    dilution_material: SolventEnum.nullable(),
+    odor_strength: OdorStrengthSchema.nullable(),
+    persistence: PersistenceSchema.nullable(),
+    dilution_material: SolventSchema.nullable(),
     description: z.string().max(1000, "Beschrijving mag niet langer zijn dan 1000 karakters.").nullable(),
     IFRA_limit: z.string().nullable(),
-    supplier: SupplierEnum.nullable(),
+    supplier: SupplierSchema.nullable(),
 });
 
-
-
+export const AromachemicalSchema = AddAromachemicalSchema.extend({
+    id: z.number()
+})
 
 export type Aromachemical = z.infer<typeof AromachemicalSchema>
 
@@ -53,7 +58,6 @@ async function fetchAromachemicals(): Promise<Aromachemical[]> {
 
         // Parse the response as JSON
         const data = await response.json();
-        console.log(data);
 
         // Validate the response with Zod
         const validatedData = AromachemicalSchema.array().parse(data);
@@ -68,12 +72,18 @@ async function fetchAromachemicals(): Promise<Aromachemical[]> {
 
 // Function to post a new aromachemical to the API
 async function postAromachemical(newAromachemical: Omit<Aromachemical, 'id'>): Promise<void> {
+
+    const { scent_category, ...aromachemical } = newAromachemical
+
     const response = await fetch('http://localhost:3000/api/aromachemicals', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newAromachemical),
+        body: JSON.stringify({
+            aromachemical,
+            scent_category
+        }),
     });
 
     if (!response.ok) {

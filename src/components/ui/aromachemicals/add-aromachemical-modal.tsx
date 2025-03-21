@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { Aromachemical, AromachemicalSchema } from "./aromachemicals-table";
-import ScentCategoryModal from "./select-scent-category-modal";
+import { Aromachemical, AddAromachemicalSchema, OdorStrength, Persistence, Solvent, Supplier, SupplierSchema, PersistenceSchema, SolventSchema, OdorStrengthSchema } from "./aromachemicals-table";
+import ScentCategoryModal, { ScentCategory } from "./select-scent-category-modal";
 
 function ErrorLabel({ message }: { message: string }) {
     return <div className="text-xs text-red-600">{message}</div>
@@ -14,15 +14,53 @@ type ModalPropType = {
     isPending: boolean;
 }
 
+const odorStrengthOptions: { value: OdorStrength, label: string }[] = [
+    { value: "Undefined", label: "Unknown" },
+    { value: "Very_weak", label: "Very weak" },
+    { value: "Weak", label: "Weak" },
+    { value: "Medium", label: "Medium" },
+    { value: "Strong", label: "Strong" },
+    { value: "Very_strong", label: "Very strong" },
+]
+
+
+const persistenceOptions: { value: Persistence, label: string }[] = [
+    { value: "Undefined", label: "Unknown" },
+    { value: "Top", label: "Top" },
+    { value: "High", label: "High" },
+    { value: "Middle", label: "Middle" },
+    { value: "Bottom", label: "Bottom" },
+    { value: "Base", label: "Base" },
+]
+
+
+const supplierOptions: { value: Supplier, label: string }[] = [
+    { value: "Undefined", label: "Unknown" },
+    { value: "IFF", label: "IFF" },
+    { value: "Firmenich", label: "Firmenich" },
+    { value: "Symrise", label: "Symrise" },
+    { value: "Givaudan", label: "Givaudan" },
+    { value: "Hekserij", label: "Hekserij" },
+]
+
+
+const solventOptions: { value: Solvent, label: string }[] = [
+    { value: "Undefined", label: "Unknown" },
+    { value: "DPG", label: "DPG" },
+    { value: "Perfumers_alcohol", label: "Perfumer's Alcohol" },
+    { value: "IPM", label: "IPM" },
+]
+
+
 function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [scentCategory, setScentCategory] = useState("");
-    const [odorStrength, setOdorStrength] = useState("");
-    const [persistence, setPersistence] = useState("");
-    const [dilutionMaterial, setDilutionMaterial] = useState("");
+    const [scentCategories, setScentCategories] = useState<ScentCategory[]>([]);
+    const [odorStrength, setOdorStrength] = useState<OdorStrength>(odorStrengthOptions[0].value);
+    const [persistence, setPersistence] = useState<Persistence>(persistenceOptions[0].value);
+    const [dilutionMaterial, setDilutionMaterial] = useState<Solvent>(solventOptions[0].value);
+    const [supplier, setSupplier] = useState<Supplier>(supplierOptions[0].value);
     const [ifraLimit, setIfraLimit] = useState("");
-    const [supplier, setSupplier] = useState("");
     const [errors, setErrors] = useState<{
         name?: string;
         description?: string;
@@ -41,16 +79,17 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
         const newAromachemical = {
             name,
             description,
-            scent_category: scentCategory,
+            scent_category: scentCategories,
             odor_strength: odorStrength,
             persistence: persistence,
             dilution_material: dilutionMaterial,
-            ifraLimit,
+            IFRA_limit: ifraLimit,
             supplier: supplier
         }
-        const { data, success, error } = AromachemicalSchema.safeParse(newAromachemical)
+        const { data, success, error } = AddAromachemicalSchema.safeParse(newAromachemical)
 
         if (!success) {
+            console.log(error)
             setErrors({
                 name: error.formErrors.fieldErrors.name?.[0],
                 description: error.formErrors.fieldErrors.description?.[0]
@@ -113,7 +152,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 />
                             </div>
                             {errors?.description && <ErrorLabel message={errors.description} />}
-                            <div className="flex items-center gap-4 mb-10 mt-4">
+                            <div className="flex flex-col items-start gap-4 mb-10 mt-4">
                                 <label htmlFor="scent_category" className="whitespace-nowrap">Scent Categorie(s):</label>
                                 <Button
                                     onClick={() => setIsModalOpen(true)}
@@ -121,7 +160,12 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                     className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                 > Select scent category('s)
                                 </Button>
-                                {isModalOpen && <ScentCategoryModal onClose={() => setIsModalOpen(false)} />}
+                                {isModalOpen && <ScentCategoryModal setScentCategories={setScentCategories} onClose={() => setIsModalOpen(false)} initialScentCategories={scentCategories} />}
+                                <div className="flex flex-row gap-2 min-w-fit">
+                                    {scentCategories.map((scentCategory, idx) => {
+                                        return <div key={idx} className="text-sm p-2 rounded-md text-white bg-blue-500">{scentCategory.category}</div>
+                                    })}
+                                </div>
                             </div>
 
                             <div>
@@ -129,15 +173,15 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 <select
                                     id="odor_strength"
                                     value={odorStrength}
-                                    onChange={(e) => setOdorStrength(e.target.value)}
+                                    onChange={(e) => {
+                                        const odorStrength = OdorStrengthSchema.parse(e.target.value);
+                                        setOdorStrength(odorStrength);
+                                    }}
                                     className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
                                 >
-                                    <option value="" disabled>Select an option</option>
-                                    <option value="Very_weak">Very Weak</option>
-                                    <option value="Weak">Weak</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Strong">Strong</option>
-                                    <option value="Very_strong">Very Strong</option>
+                                    {odorStrengthOptions.map((option) => {
+                                        return <option key={option.value} value={option.value}>{option.label}</option>
+                                    })}
                                 </select>
                             </div>
                         </div>
@@ -157,15 +201,15 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 <select
                                     id="supplier"
                                     value={supplier}
-                                    onChange={(e) => setSupplier(e.target.value)}
+                                    onChange={(e) => {
+                                        const supplier = SupplierSchema.parse(e.target.value);
+                                        setSupplier(supplier);
+                                    }}
                                     className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
                                 >
-                                    <option value="" disabled>Select a supplier</option>
-                                    <option value="IFF">IFF</option>
-                                    <option value="Firmenich">Firmenich</option>
-                                    <option value="Symrise">Symrise</option>
-                                    <option value="Givaudan">Givaudan</option>
-                                    <option value="Hekserij">Hekserij</option>
+                                    {supplierOptions.map((option) => {
+                                        return <option key={option.value} value={option.value}>{option.label}</option>
+                                    })}
                                 </select>
                             </div>
 
@@ -174,15 +218,15 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 <select
                                     id="persistence"
                                     value={persistence}
-                                    onChange={(e) => setPersistence(e.target.value)}
+                                    onChange={(e) => {
+                                        const persistence = PersistenceSchema.parse(e.target.value);
+                                        setPersistence(persistence);
+                                    }}
                                     className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
                                 >
-                                    <option value="" disabled>Select persistence</option>
-                                    <option value="Top">Top</option>
-                                    <option value="High">High</option>
-                                    <option value="Middle">Middle</option>
-                                    <option value="Bottom">Bottom</option>
-                                    <option value="Base">Base</option>
+                                    {persistenceOptions.map((option) => {
+                                        return <option key={option.value} value={option.value}>{option.label}</option>
+                                    })}
                                 </select>
                             </div>
 
@@ -191,13 +235,15 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 <select
                                     id="dilution_material"
                                     value={dilutionMaterial}
-                                    onChange={(e) => setDilutionMaterial(e.target.value)}
+                                    onChange={(e) => {
+                                        const dilutionMaterial = SolventSchema.parse(e.target.value);
+                                        setDilutionMaterial(dilutionMaterial);
+                                    }}
                                     className="border border-gray-300 rounded px-3 py-2 w-full mb-4"
                                 >
-                                    <option value="" disabled>Select a solvent</option>
-                                    <option value="DPG">DPG</option>
-                                    <option value="Perfumers_alcohol">Perfumers Alcohol</option>
-                                    <option value="IPM">IPM</option>
+                                    {solventOptions.map((option) => {
+                                        return <option key={option.value} value={option.value}>{option.label}</option>
+                                    })}
                                 </select>
                             </div></div>
                     </div>

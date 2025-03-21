@@ -3,15 +3,17 @@ import CloseIcon from "../../icons/close-icon";
 import { useQuery } from "@tanstack/react-query";
 import { ScentCategorySchema } from "./aromachemicals-table";
 import { z } from "zod";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 
 type ModalPropType = {
     onClose: () => void;
+    setScentCategories: Dispatch<SetStateAction<ScentCategory[]>>;
+    initialScentCategories: ScentCategory[];
 };
 
 
-type ScentCategory = z.infer<typeof ScentCategorySchema>
+export type ScentCategory = z.infer<typeof ScentCategorySchema>
 
 async function fetchScentCategories(): Promise<ScentCategory[]> {
     try {
@@ -22,7 +24,6 @@ async function fetchScentCategories(): Promise<ScentCategory[]> {
         }
 
         const data = await response.json();
-        console.log(data);
 
         const validatedData = ScentCategorySchema.array().parse(data);
 
@@ -34,9 +35,9 @@ async function fetchScentCategories(): Promise<ScentCategory[]> {
 }
 
 
-function ScentCategoryModal({ onClose }: ModalPropType) {
+function ScentCategoryModal({ onClose, setScentCategories, initialScentCategories }: ModalPropType) {
 
-    const [selectedCategories, setSelectedCategories] = useState<Set<number>>(new Set());
+    const [selectedCategories, setSelectedCategories] = useState<Set<ScentCategory>>(new Set(initialScentCategories));
 
     const { data, error, isLoading, isError } = useQuery({
         queryKey: ["scent-categories"],
@@ -44,13 +45,13 @@ function ScentCategoryModal({ onClose }: ModalPropType) {
     })
 
     // Handle checkbox toggle
-    const handleCheckboxChange = (id: number) => {
+    const handleCheckboxChange = (category: ScentCategory) => {
         setSelectedCategories((prev) => {
             const newSet = new Set(prev);
-            if (newSet.has(id)) {
-                newSet.delete(id);
+            if (newSet.has(category)) {
+                newSet.delete(category);
             } else {
-                newSet.add(id);
+                newSet.add(category);
             }
             return newSet;
         });
@@ -89,8 +90,8 @@ function ScentCategoryModal({ onClose }: ModalPropType) {
                                     <input
                                         type="checkbox"
                                         id={`category-${category.id}`}
-                                        checked={selectedCategories.has(category.id)}
-                                        onChange={() => handleCheckboxChange(category.id)}
+                                        checked={selectedCategories.has(category)}
+                                        onChange={() => handleCheckboxChange(category)}
                                     />
                                     <label htmlFor={`category-${category.id}`}>{category.category}</label>
                                 </li>
@@ -99,7 +100,11 @@ function ScentCategoryModal({ onClose }: ModalPropType) {
                     ) : (
                         "No categories found"
                     )}
-                    <Button onClick={onClose}>Close</Button>
+                    <Button onClick={(e) => {
+                        e.preventDefault();
+                        setScentCategories([...selectedCategories]);
+                        onClose();
+                    }}>Save</Button>
                 </div>
             </div>
 
