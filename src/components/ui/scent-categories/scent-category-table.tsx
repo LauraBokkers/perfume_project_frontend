@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { toast } from "react-toastify";
 import AddScentCategoryModal from './add-scent-category-modal';
 import DeleteModal from '../delete-modal';
+import EditScentCategoryModal from './edit-scent-category-modal';
 
 
 // Define the Zod schema for the Formula type
@@ -71,8 +72,8 @@ async function deleteScentCategory(idToBeDeleted: ScentCategory["id"]): Promise<
     }
 }
 
-async function editScentCategory(updatedScentCategory: ScentCategory): Promise<void> {
-    const formattedKey = updatedScentCategory.category.replace(/\s+/g, '').toLowerCase();
+async function editScentCategory(scentCategoryId: ScentCategory['id'], updatedScentCategory: ScentCategory["category"]): Promise<void> {
+    const formattedKey = updatedScentCategory.replace(/\s+/g, '').toLowerCase();
 
     const response = await fetch(`http://localhost:3000/api/scent-categories/${updatedScentCategory.id}`, {
         method: 'PATCH',
@@ -80,7 +81,7 @@ async function editScentCategory(updatedScentCategory: ScentCategory): Promise<v
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            category: updatedScentCategory.category,
+            category: updatedScentCategory,
             key: formattedKey,
         }),
     });
@@ -93,7 +94,7 @@ async function editScentCategory(updatedScentCategory: ScentCategory): Promise<v
 export default function ScentCategoriesTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [scentCategoryToDelete, setScentCategoryToDelete] = useState<null | ScentCategory>(null);
-    const [scentCategoryToEdit, setScentCategoryToEdit] = useState<null | ScentCategory['id']>(null);
+    const [scentCategoryToEdit, setScentCategoryToEdit] = useState<null | ScentCategory>(null);
     const [scentCategoryId, setScentCategoryId] = useState<null | ScentCategory['id']>(null);
 
     const queryClient = useQueryClient()
@@ -129,7 +130,7 @@ export default function ScentCategoriesTable() {
     })
 
     const editScentCategoryMutation = useMutation({
-        mutationFn: (scentCategory: ScentCategory) => editScentCategory(scentCategory),
+        mutationFn: ({ id, category }: { id: ScentCategory['id'], category: ScentCategory["category"] }) => editScentCategory(id, category),
         onSuccess: () => {
             setScentCategoryToEdit(null)
             queryClient.invalidateQueries({ queryKey: ["scent-categories"] });
@@ -144,7 +145,7 @@ export default function ScentCategoriesTable() {
     return (
         <div className="p-10 bg-custom-table rounded-xl">
             {data && <DataTable
-                columns={getColumns({ handleDeleteScentCategory: setScentCategoryToDelete, handleViewScentcategory: setScentCategoryId, handleEditScentCategory: setScentCategoryToEdit })}
+                columns={getColumns({ handleDeleteScentCategory: setScentCategoryToDelete, handleEditScentCategory: setScentCategoryToEdit })}
                 data={data}
                 handleClickAdd={() => setIsDialogOpen(true)}
                 showAddButton
@@ -162,18 +163,11 @@ export default function ScentCategoriesTable() {
                     itemType="scent category" />
 
             )}
-
-            {scentCategoryId && (
-                <ViewModal
-                    formulationId={scentCategoryId}
-                    onClose={() => setScentCategoryId(null)}
-                />
-            )}
             {scentCategoryToEdit && (
-                <EditModal
+                <EditScentCategoryModal
                     onClose={() => setScentCategoryToEdit(null)}
                     handleSubmit={editScentCategoryMutation.mutate}
-                    formulationId={scentCategoryToEdit}
+                    scentCategory={scentCategoryToEdit}
                 />
             )}
 
