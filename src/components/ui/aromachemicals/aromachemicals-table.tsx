@@ -3,10 +3,11 @@ import { DataTable } from "../generic-data-table";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from 'zod';
 import { useState } from 'react';
-import DeleteModal from "./delete-aromachemical-modal";
+
 import EditModal from "./edit-aromachemical-modal";
 import { toast } from "react-toastify";
 import AddModal from "./add-aromachemical-modal";
+import DeleteModal from "../delete-modal";
 
 
 
@@ -184,9 +185,10 @@ export default function AromachemicalsTable() {
                 onClose={() => setIsDialogOpen(false)} />}
             {aromachemicalToDelete && (
                 <DeleteModal
-                    aromachemical={aromachemicalToDelete}
+                    item={aromachemicalToDelete}
                     onClose={() => setAromachemicalToDelete(null)}
-                    onConfirm={deleteAromachemicalMutation.mutate} />
+                    onConfirm={deleteAromachemicalMutation.mutate}
+                    itemType="aromachemical" />
             )}
 
             {aromachemicalToEdit && (

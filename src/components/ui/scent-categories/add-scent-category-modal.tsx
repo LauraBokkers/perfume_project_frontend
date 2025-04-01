@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { type Aromachemical } from "./aromachemicals-table";
+import { ScentCategory } from "./scent-category-table";
 
-interface ModalPropType {
+type ModalPropType = {
     onClose: () => void;
-    handleSubmit: ({ ...props }: Aromachemical) => void;
-    aromachemical: Aromachemical;
+    handleSubmit: ({ ...props }: Omit<ScentCategory, "id">) => void;
     isPending: boolean;
 }
 
-const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPropType) => {
-    const [name, setName] = useState<string>(aromachemical.name);
-    const [description, setDescription] = useState(aromachemical.description ?? "");
+function AddScentCategoryModal({ onClose, handleSubmit, isPending }: ModalPropType) {
+    const [category, setCategory] = useState("");
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
@@ -25,6 +23,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
         return () => {
             document.body.removeEventListener("keydown", handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -46,45 +45,27 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit({ id: aromachemical.id, name, description });
+                        handleSubmit({ category });
                         onClose();
                     }}
                 >
-                    <div className='py-3'>
-                        <label htmlFor="name" className="block mb-1">Name:</label>
+                    <div>
+                        <label htmlFor="name" className="block mb-1">Title:</label>
                         <input
                             id="name"
                             type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
                             required
                             className="border border-gray-300 rounded px-3 py-1"
                         />
                     </div>
-                    <div className='py-3'>
-                        <label htmlFor="description" className="mt-2 mb-1 block">Description:</label>
-                        <textarea
-                            id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="border border-gray-300 rounded px-3 py-2 w-full resize-y mb-4"
-                        />
-                    </div>
-
-
-
-
-
-
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="bg-custom-accentLight hover:bg-custom-background text-black py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
-                        Submit <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-
+                        Submit
                     </Button>
                 </form>
             </div>
@@ -92,4 +73,4 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
     );
 };
 
-export default EditModal;
+export default AddScentCategoryModal;

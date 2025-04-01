@@ -10,7 +10,7 @@ interface ModalPropType {
     aromachemical: Aromachemical;
 }
 
-const DeleteModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
+const DeleteAromachemicalModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
             onClose();
@@ -53,4 +53,4 @@ const DeleteModal = ({ onClose, onConfirm, aromachemical }: ModalPropType) => {
     );
 };
 
-export default DeleteModal;
+export default DeleteAromachemicalModal;

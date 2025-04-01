@@ -1,6 +1,7 @@
 import AromachemicalsTable from './components/ui/aromachemicals/aromachemicals-table'
 import FormulationsTable from './components/ui/formulations/formulations-table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ScentCategoriesTable from './components/ui/scent-categories/scent-category-table'
 
 function App() {
 
@@ -10,9 +11,11 @@ function App() {
         <TabsList className='w-full rounded-lg '>
           <TabsTrigger value="aromachemicals">Aromachemicals</TabsTrigger>
           <TabsTrigger value="formulations">Formulations</TabsTrigger>
+          <TabsTrigger value="scent-categories">Scent Categories</TabsTrigger>
         </TabsList>
         <TabsContent value="aromachemicals"><AromachemicalsTable /></TabsContent>
         <TabsContent value="formulations"><FormulationsTable /></TabsContent>
+        <TabsContent value="scent-categories"><ScentCategoriesTable /></TabsContent>
       </Tabs>
 
     </div>

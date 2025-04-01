@@ -5,9 +5,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from 'react';
 import AddModal from "./add-formulation-modal";
 import { toast } from "react-toastify";
-import DeleteModal from './delete-formulation-modal';
+
 import EditModal from './edit-formulation-modal';
 import ViewModal from './view-formulation-modal';
+import DeleteModal from '../delete-modal';
 
 // Define the Zod schema for the Formula type
 export const FormulaSchema = z.object({
@@ -185,9 +186,10 @@ export default function FormulationsTable() {
                 onClose={() => setIsDialogOpen(false)} />}
             {formulationToDelete && (
                 <DeleteModal
-                    formulation={formulationToDelete}
+                    item={formulationToDelete}
                     onClose={() => setFormulationToDelete(null)}
-                    onConfirm={deleteFormulationMutation.mutate} />
+                    onConfirm={deleteFormulationMutation.mutate}
+                    itemType='formulation' />
             )}
 
             {formulationId && (
