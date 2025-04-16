@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ScentCategorySchema } from "./aromachemicals-table";
 import { z } from "zod";
 import { Dispatch, SetStateAction, useState } from "react";
+import { API_BASE_URL } from "@/constants";
 
 
 type ModalPropType = {
@@ -17,7 +18,7 @@ export type ScentCategory = z.infer<typeof ScentCategorySchema>
 
 async function fetchScentCategories(): Promise<ScentCategory[]> {
     try {
-        const response = await fetch('http://localhost:3000/api/scent-categories');
+        const response = await fetch(`${API_BASE_URL}/api/scent-categories`);
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);

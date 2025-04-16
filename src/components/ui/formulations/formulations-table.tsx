@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import EditModal from './edit-formulation-modal';
 import ViewModal from './view-formulation-modal';
 import DeleteModal from '../delete-modal';
+import { API_BASE_URL } from '@/constants';
 
 // Define the Zod schema for the Formula type
 export const FormulaSchema = z.object({
@@ -31,7 +32,7 @@ export type Formulation = z.infer<typeof FormulaSchema>
 // Function to fetch specific formulation by id from the API
 export async function fetchFormulationById(id: Formulation['id']): Promise<Formulation> {
     try {
-        const response = await fetch(`http://localhost:3000/api/formulas/get-formula-by-id/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/formulas/get-formula-by-id/${id}`);
 
         // Check if the response is OK (status in the range 200-299)
         if (!response.ok) {
@@ -54,7 +55,7 @@ export async function fetchFormulationById(id: Formulation['id']): Promise<Formu
 // Function to fetch formulas from the API
 async function fetchFormulations(): Promise<Formulation[]> {
     try {
-        const response = await fetch('http://localhost:3000/api/formulas');
+        const response = await fetch(`${API_BASE_URL}/api/formulas`);
 
         // Check if the response is OK (status in the range 200-299)
         if (!response.ok) {
@@ -76,7 +77,7 @@ async function fetchFormulations(): Promise<Formulation[]> {
 
 // Function to post a new formula to the API
 async function postFormulation(newFormula: Omit<Formulation, 'id'>): Promise<void> {
-    const response = await fetch('http://localhost:3000/api/formulas', {
+    const response = await fetch(`${API_BASE_URL}/api/formulas`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -90,7 +91,7 @@ async function postFormulation(newFormula: Omit<Formulation, 'id'>): Promise<voi
 }
 
 async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/formulas/${idToBeDeleted}`, {
+    const response = await fetch(`${API_BASE_URL}/api/formulas/${idToBeDeleted}`, {
         method: 'DELETE',
     });
 
@@ -100,7 +101,7 @@ async function deleteFormulation(idToBeDeleted: Formulation["id"]): Promise<void
 }
 
 async function editFormulation(updatedFormulation: Formulation): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/formulas/${updatedFormulation.id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/formulas/${updatedFormulation.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

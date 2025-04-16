@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
 import { ScentCategory } from "./scent-category-table";
+import { z } from "zod";
 
+const categorySchema = z.string().min(2, "te kort haha!").max(100)
 
 interface EditScentCategoryModalPropType {
     onClose: () => void;
@@ -13,12 +15,25 @@ interface EditScentCategoryModalPropType {
 const EditScentCategoryModal = ({ onClose, scentCategory, handleSubmit }: EditScentCategoryModalPropType) => {
 
     const [category, setCategory] = useState<string>(scentCategory.category);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     // Closing modal with keyboard
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === "Escape") {
             onClose();
         }
+    }
+
+    function onSubmit() {
+        setErrorMessage(null);
+        const { data, success, error } = categorySchema.safeParse(category);
+
+        if (!success) {
+            setErrorMessage(error.issues[0].message)
+            return;
+        };
+
+        handleSubmit({ id: scentCategory.id, category: data })
     }
 
     useEffect(() => {
@@ -47,7 +62,7 @@ const EditScentCategoryModal = ({ onClose, scentCategory, handleSubmit }: EditSc
                 <div className="flex-col flex gap-2 py-2">
                     <div className='py-4'>
                         <label htmlFor="name" className="block mb-1">Category:</label>
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col justify-between items-center">
                             <input
                                 id="name"
                                 type="text"
@@ -56,13 +71,13 @@ const EditScentCategoryModal = ({ onClose, scentCategory, handleSubmit }: EditSc
                                 required
                                 className="border border-gray-300 rounded px-3 py-1"
                             />
+                            {errorMessage && <span className="text-red-800 text-sm">{errorMessage}</span>}
                         </div>
                     </div>
                 </div>
                 <Button
                     type="submit"
-                    onClick={() => handleSubmit({ id: scentCategory.id, category: category })}
-
+                    onClick={onSubmit}
                     className="bg-custom-accentLight hover:bg-green-200 text-black mt-4 py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 >
                     Submit changes <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

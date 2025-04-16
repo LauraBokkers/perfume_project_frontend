@@ -8,6 +8,7 @@ import EditModal from "./edit-aromachemical-modal";
 import { toast } from "react-toastify";
 import AddModal from "./add-aromachemical-modal";
 import DeleteModal from "../delete-modal";
+import { API_BASE_URL } from "@/constants";
 
 
 
@@ -50,7 +51,7 @@ export type Aromachemical = z.infer<typeof AromachemicalSchema>
 // Function to fetch aromachemicals from the API
 async function fetchAromachemicals(): Promise<Aromachemical[]> {
     try {
-        const response = await fetch('http://localhost:3000/api/aromachemicals');
+        const response = await fetch(`${API_BASE_URL}/api/aromachemicals`);
 
         // Check if the response is OK (status in the range 200-299)
         if (!response.ok) {
@@ -76,7 +77,7 @@ async function postAromachemical(newAromachemical: Omit<Aromachemical, 'id'>): P
 
     const { scent_category, ...aromachemical } = newAromachemical
 
-    const response = await fetch('http://localhost:3000/api/aromachemicals', {
+    const response = await fetch(`${API_BASE_URL}/api/aromachemicals`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -93,7 +94,7 @@ async function postAromachemical(newAromachemical: Omit<Aromachemical, 'id'>): P
 }
 
 async function deleteAromaChemical(idToBeDeleted: Aromachemical["id"]): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/aromachemicals/${idToBeDeleted}`, {
+    const response = await fetch(`${API_BASE_URL}/api/aromachemicals/${idToBeDeleted}`, {
         method: 'DELETE',
     });
 
@@ -103,7 +104,7 @@ async function deleteAromaChemical(idToBeDeleted: Aromachemical["id"]): Promise<
 }
 
 async function editAromaChemical({ id, name, description }: Aromachemical): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/aromachemicals/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/aromachemicals/${id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

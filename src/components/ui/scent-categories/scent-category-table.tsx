@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import AddScentCategoryModal from './add-scent-category-modal';
 import DeleteModal from '../delete-modal';
 import EditScentCategoryModal from './edit-scent-category-modal';
+import { API_BASE_URL } from '@/constants';
 
 
 // Define the Zod schema for the Formula type
@@ -21,7 +22,7 @@ export type ScentCategory = z.infer<typeof ScentCategoriesSchema>
 
 async function fetchScentCategories(): Promise<ScentCategory[]> {
     try {
-        const response = await fetch('http://localhost:3000/api/scent-categories');
+        const response = await fetch(`${API_BASE_URL}/api/scent-categories`);
 
         // Check if the response is OK (status in the range 200-299)
         if (!response.ok) {
@@ -49,7 +50,7 @@ async function postScentCategory(scentCategory: Omit<ScentCategory, 'id' | 'key'
         key: formattedKey,
     };
 
-    const response = await fetch('http://localhost:3000/api/scent-categories', {
+    const response = await fetch(`${API_BASE_URL}/api/scent-categories`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ async function postScentCategory(scentCategory: Omit<ScentCategory, 'id' | 'key'
 }
 
 async function deleteScentCategory(idToBeDeleted: ScentCategory["id"]): Promise<void> {
-    const response = await fetch(`http://localhost:3000/api/scent-categ/${idToBeDeleted}`, {
+    const response = await fetch(`${API_BASE_URL}/api/scent-categ/${idToBeDeleted}`, {
         method: 'DELETE',
     });
 
@@ -75,8 +76,8 @@ async function deleteScentCategory(idToBeDeleted: ScentCategory["id"]): Promise<
 async function editScentCategory(scentCategoryId: ScentCategory['id'], updatedScentCategory: ScentCategory["category"]): Promise<void> {
     const formattedKey = updatedScentCategory.replace(/\s+/g, '').toLowerCase();
 
-    const response = await fetch(`http://localhost:3000/api/scent-categories/${updatedScentCategory.id}`, {
-        method: 'PATCH',
+    const response = await fetch(`${API_BASE_URL}/api/scent-categories/${scentCategoryId}`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -95,7 +96,6 @@ export default function ScentCategoriesTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [scentCategoryToDelete, setScentCategoryToDelete] = useState<null | ScentCategory>(null);
     const [scentCategoryToEdit, setScentCategoryToEdit] = useState<null | ScentCategory>(null);
-    const [scentCategoryId, setScentCategoryId] = useState<null | ScentCategory['id']>(null);
 
     const queryClient = useQueryClient()
 
@@ -161,7 +161,6 @@ export default function ScentCategoriesTable() {
                     onClose={() => setScentCategoryToDelete(null)}
                     onConfirm={deleteScentCategoryMutation.mutate}
                     itemType="scent category" />
-
             )}
             {scentCategoryToEdit && (
                 <EditScentCategoryModal
