@@ -10,7 +10,7 @@ interface ModalPropType {
     isPending: boolean;
 }
 
-const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPropType) => {
+const EditModal = ({ onClose, aromachemical, isPending }: ModalPropType) => {
     const [name, setName] = useState<string>(aromachemical.name);
     const [description, setDescription] = useState(aromachemical.description ?? "");
 
@@ -46,7 +46,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit({ id: aromachemical.id, name, description });
+                        // handleSubmit({ id: aromachemical.id, name, description });
                         onClose();
                     }}
                 >

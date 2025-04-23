@@ -11,7 +11,7 @@ interface ViewModalPropType {
 
 const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
 
-    const { data, error, isLoading, isError } = useQuery({
+    const { data } = useQuery({
         queryKey: ["formulation", formulationId],
         queryFn: () => fetchFormulationById(formulationId),
     })

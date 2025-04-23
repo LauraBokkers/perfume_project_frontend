@@ -10,7 +10,7 @@ interface ModalPropType {
     onConfirm: () => void;
 }
 
-const AddFormulalinesModal = ({ existingFormulaLines, onClose, onConfirm }: ModalPropType) => {
+const AddFormulalinesModal = ({ onClose, onConfirm }: ModalPropType) => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {

@@ -42,11 +42,11 @@ async function fetchScentCategories(): Promise<ScentCategory[]> {
     }
 }
 
-async function postScentCategory(scentCategory: Omit<ScentCategory, 'id' | 'key'>): Promise<void> {
-    const formattedKey = scentCategory.category.replace(/\s+/g, '').toLowerCase();
+async function postScentCategory(category: string): Promise<void> {
+    const formattedKey = category.replace(/\s+/g, '').toLowerCase();
 
     const payload = {
-        ...scentCategory,
+        category,
         key: formattedKey,
     };
 
@@ -105,7 +105,7 @@ export default function ScentCategoriesTable() {
     })
 
     const newScentCategoryMutation = useMutation({
-        mutationFn: (newScentCategory: Omit<ScentCategory, 'id'>) => postScentCategory(newScentCategory),
+        mutationFn: (category: string) => postScentCategory(category),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["scent-categories"] });
             toast.success("Successfully added new scent category!")

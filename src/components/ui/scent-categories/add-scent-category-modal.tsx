@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
-import { ScentCategory } from "./scent-category-table";
 
 type ModalPropType = {
     onClose: () => void;
-    handleSubmit: ({ ...props }: Omit<ScentCategory, "id">) => void;
+    handleSubmit: (category: string) => void;
     isPending: boolean;
 }
 
@@ -45,7 +44,7 @@ function AddScentCategoryModal({ onClose, handleSubmit, isPending }: ModalPropTy
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit({ category });
+                        handleSubmit(category);
                         onClose();
                     }}
                 >
