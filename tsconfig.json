@@ -22,14 +22,21 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-    "types": []
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src",
   ],
+  "files": [],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
 }
