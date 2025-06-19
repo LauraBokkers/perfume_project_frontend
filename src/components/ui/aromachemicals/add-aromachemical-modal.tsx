@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
 import { Aromachemical, AddAromachemicalSchema, OdorStrength, Persistence, Solvent, Supplier, SupplierSchema, PersistenceSchema, SolventSchema, OdorStrengthSchema } from "./aromachemicals-table";
 import ScentCategoryModal, { ScentCategory } from "./select-scent-category-modal";
+import { odorStrengthOptions, persistenceOptions, solventOptions, supplierOptions } from "./aromachemical-types";
 
 function ErrorLabel({ message }: { message: string }) {
     return <div className="text-xs text-red-600">{message}</div>
@@ -14,42 +15,6 @@ type ModalPropType = {
     isPending: boolean;
 }
 
-const odorStrengthOptions: { value: OdorStrength, label: string }[] = [
-    { value: "Undefined", label: "Unknown" },
-    { value: "Very_weak", label: "Very weak" },
-    { value: "Weak", label: "Weak" },
-    { value: "Medium", label: "Medium" },
-    { value: "Strong", label: "Strong" },
-    { value: "Very_strong", label: "Very strong" },
-]
-
-
-const persistenceOptions: { value: Persistence, label: string }[] = [
-    { value: "Undefined", label: "Unknown" },
-    { value: "Top", label: "Top" },
-    { value: "High", label: "High" },
-    { value: "Middle", label: "Middle" },
-    { value: "Bottom", label: "Bottom" },
-    { value: "Base", label: "Base" },
-]
-
-
-const supplierOptions: { value: Supplier, label: string }[] = [
-    { value: "Undefined", label: "Unknown" },
-    { value: "IFF", label: "IFF" },
-    { value: "Firmenich", label: "Firmenich" },
-    { value: "Symrise", label: "Symrise" },
-    { value: "Givaudan", label: "Givaudan" },
-    { value: "Hekserij", label: "Hekserij" },
-]
-
-
-const solventOptions: { value: Solvent, label: string }[] = [
-    { value: "Undefined", label: "Unknown" },
-    { value: "DPG", label: "DPG" },
-    { value: "Perfumers_alcohol", label: "Perfumer's Alcohol" },
-    { value: "IPM", label: "IPM" },
-]
 
 
 function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
