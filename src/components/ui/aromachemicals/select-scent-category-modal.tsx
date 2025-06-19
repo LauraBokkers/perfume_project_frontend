@@ -74,7 +74,8 @@ function ScentCategoryModal({ onClose, setScentCategories, initialScentCategorie
                 onClick={onClose}
             >
                 <div
-                    className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-xl bg-white px-10 py-8"
+                    className="shadow-hover relative flex flex-col gap-6 rounded-xl bg-white w-auto h-auto max-h-[90vh] overflow-y-auto px-10 py-8"
+
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div
