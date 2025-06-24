@@ -156,6 +156,7 @@ export default function AromachemicalsTable() {
         mutationFn: (aromachemical: Aromachemical) => editAromaChemical(aromachemical),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["aromachemicals"] });
+            toast.success("Successfully edited aromachemical.");
         },
         onError: (error) => {
             console.error('Failed to edit the aromachemical:', error);
