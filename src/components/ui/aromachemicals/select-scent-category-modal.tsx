@@ -38,7 +38,9 @@ async function fetchScentCategories(): Promise<ScentCategory[]> {
 
 function ScentCategoryModal({ onClose, setScentCategories, initialScentCategories }: ModalPropType) {
 
-    const [selectedCategories, setSelectedCategories] = useState<Set<ScentCategory>>(new Set(initialScentCategories));
+    const [selectedCategories, setSelectedCategories] = useState<Set<number>>(
+        new Set(initialScentCategories.map(c => c.id))
+    );
 
     const { data, error, isLoading, isError } = useQuery({
         queryKey: ["scent-categories"],
@@ -46,13 +48,14 @@ function ScentCategoryModal({ onClose, setScentCategories, initialScentCategorie
     })
 
     // Handle checkbox toggle
+
     const handleCheckboxChange = (category: ScentCategory) => {
-        setSelectedCategories((prev) => {
+        setSelectedCategories(prev => {
             const newSet = new Set(prev);
-            if (newSet.has(category)) {
-                newSet.delete(category);
+            if (newSet.has(category.id)) {
+                newSet.delete(category.id);
             } else {
-                newSet.add(category);
+                newSet.add(category.id);
             }
             return newSet;
         });
@@ -92,7 +95,7 @@ function ScentCategoryModal({ onClose, setScentCategories, initialScentCategorie
                                     <input
                                         type="checkbox"
                                         id={`category-${category.id}`}
-                                        checked={selectedCategories.has(category)}
+                                        checked={selectedCategories.has(category.id)}
                                         onChange={() => handleCheckboxChange(category)}
                                     />
                                     <label htmlFor={`category-${category.id}`}>{category.category}</label>
@@ -104,7 +107,8 @@ function ScentCategoryModal({ onClose, setScentCategories, initialScentCategorie
                     )}
                     <Button onClick={(e) => {
                         e.preventDefault();
-                        setScentCategories([...selectedCategories]);
+                        if (!data) return;
+                        setScentCategories(data.filter(category => selectedCategories.has(category.id)));
                         onClose();
                     }}>Save</Button>
                 </div>

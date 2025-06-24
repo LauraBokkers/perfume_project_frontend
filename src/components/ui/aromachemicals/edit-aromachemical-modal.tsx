@@ -16,12 +16,12 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
     const [name, setName] = useState<string>(aromachemical.name);
     const [description, setDescription] = useState(aromachemical.description ?? "");
 
-    const [scentCategories, setScentCategories] = useState<ScentCategory[]>([]);
-    const [odorStrength, setOdorStrength] = useState<OdorStrength>(odorStrengthOptions[0].value);
-    const [persistence, setPersistence] = useState<Persistence>(persistenceOptions[0].value);
-    const [dilutionMaterial, setDilutionMaterial] = useState<Solvent>(solventOptions[0].value);
-    const [supplier, setSupplier] = useState<Supplier>(supplierOptions[0].value);
-    const [ifraLimit, setIfraLimit] = useState("");
+    const [scentCategories, setScentCategories] = useState<ScentCategory[]>(aromachemical.scent_category ?? []);
+    const [odorStrength, setOdorStrength] = useState<OdorStrength>(aromachemical.odor_strength ?? odorStrengthOptions[0].value);
+    const [persistence, setPersistence] = useState<Persistence>(aromachemical.persistence ?? persistenceOptions[0].value);
+    const [dilutionMaterial, setDilutionMaterial] = useState<Solvent>(aromachemical.dilution_material ?? solventOptions[0].value);
+    const [supplier, setSupplier] = useState<Supplier>(aromachemical.supplier ?? supplierOptions[0].value);
+    const [ifraLimit, setIfraLimit] = useState(aromachemical.IFRA_limit ?? "");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -59,24 +59,6 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-
-
-                        const payload = {
-                            id: aromachemical.id,
-                            name,
-                            description,
-                            scent_category: {
-                                set: scentCategories.map(element => ({ id: element.id }))
-                            },
-                            odorStrength,
-                            persistence,
-                            dilution_material: dilutionMaterial,
-                            IFRA_limit: ifraLimit,
-                            supplier,
-                        };
-
-                        console.log("Payload to backend:", payload);
-
                         handleSubmit({
                             id: aromachemical.id,
                             name: name,
