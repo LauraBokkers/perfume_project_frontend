@@ -5,7 +5,7 @@ import CloseIcon from "../icons/close-icon";
 interface DeleteModalProps {
     onClose: () => void;
     onConfirm: (id: number) => void;
-    item: { id: number; name?: string; title?: string };
+    item: { id: number; name?: string; title?: string; category?: string };
     itemType: "formulation" | "aromachemical" | "scent category";
 }
 
@@ -23,7 +23,7 @@ const DeleteModal = ({ onClose, onConfirm, item, itemType }: DeleteModalProps) =
         };
     }, []);
 
-    const itemName = item.title || item.name || "item";
+    const itemName = item.title || item.name || item.category || "item";
 
     return (
         <div
