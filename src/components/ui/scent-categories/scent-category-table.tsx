@@ -61,16 +61,19 @@ async function postScentCategory(category: string): Promise<void> {
     if (!response.ok) {
         throw new Error(`Failed to post scent category: ${response.statusText}`);
     }
+    return
 }
 
 async function deleteScentCategory(idToBeDeleted: ScentCategory["id"]): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/scent-categ/${idToBeDeleted}`, {
+
+    const response = await fetch(`${API_BASE_URL}/api/scent-categories/${idToBeDeleted}`, {
         method: 'DELETE',
     });
 
     if (!response.ok) {
         throw new Error(`Failed to delete scent category: ${response.statusText}`);
     }
+    return
 }
 
 async function editScentCategory(scentCategoryId: ScentCategory['id'], updatedScentCategory: ScentCategory["category"]): Promise<void> {
@@ -90,6 +93,7 @@ async function editScentCategory(scentCategoryId: ScentCategory['id'], updatedSc
     if (!response.ok) {
         throw new Error(`Failed to edit scent category: ${response.statusText}`);
     }
+    return
 }
 
 export default function ScentCategoriesTable() {
