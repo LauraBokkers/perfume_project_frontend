@@ -103,7 +103,7 @@ async function deleteAromaChemical(idToBeDeleted: Aromachemical["id"]): Promise<
     }
 }
 
-async function editAromaChemical({ id, name, description }: Aromachemical): Promise<void> {
+async function editAromaChemical({ id, name, description, IFRA_limit, dilution_material, odor_strength, persistence, scent_category, supplier }: Aromachemical): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/aromachemicals/${id}`, {
         method: 'PATCH',
         headers: {
@@ -111,7 +111,15 @@ async function editAromaChemical({ id, name, description }: Aromachemical): Prom
         },
         body: JSON.stringify({
             name,
-            description
+            description,
+            IFRA_limit,
+            dilution_material,
+            odor_strength,
+            persistence,
+            scent_category: {
+                set: scent_category.map((element) => ({ id: element.id }))
+            },
+            supplier,
         })
     });
 

@@ -59,7 +59,35 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        handleSubmit({ id: aromachemical.id, name, description });
+
+
+                        const payload = {
+                            id: aromachemical.id,
+                            name,
+                            description,
+                            scent_category: {
+                                set: scentCategories.map(element => ({ id: element.id }))
+                            },
+                            odorStrength,
+                            persistence,
+                            dilution_material: dilutionMaterial,
+                            IFRA_limit: ifraLimit,
+                            supplier,
+                        };
+
+                        console.log("Payload to backend:", payload);
+
+                        handleSubmit({
+                            id: aromachemical.id,
+                            name: name,
+                            description: description,
+                            scent_category: scentCategories,
+                            odor_strength: odorStrength,
+                            persistence: persistence,
+                            dilution_material: dilutionMaterial,
+                            IFRA_limit: ifraLimit,
+                            supplier: supplier,
+                        });
                         onClose();
                     }}
                 >
