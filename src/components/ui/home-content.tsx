@@ -25,7 +25,9 @@ export const HomeContent = () => {
       </p>
       <p>
         De front-end is gedeployed en gehost met <b>Vercel</b> en de back-end en
-        database met <b>Railway</b>.
+        database met <b>Railway</b>. De app is ontworpen om responsive te zijn,
+        maar voor de beste gebruikerservaring raad ik aan om deze op een groter
+        scherm te bekijken.
       </p>
     </div>
   );
