@@ -147,7 +147,7 @@ export default function ScentCategoriesTable() {
     })
 
     return (
-        <div className="p-10 bg-custom-table rounded-xl">
+        <div className="p-10 bg-custom-table rounded-xl overflow-x-scroll">
             {data && <DataTable
                 columns={getColumns({ handleDeleteScentCategory: setScentCategoryToDelete, handleEditScentCategory: setScentCategoryToEdit })}
                 data={data}

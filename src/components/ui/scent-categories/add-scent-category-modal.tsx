@@ -27,9 +27,7 @@ function AddScentCategoryModal({ onClose, handleSubmit, isPending }: ModalPropTy
 
     return (
         <div
-            id="mail-modal"
             className={"fixed inset-0 z-50 mx-2 flex items-center justify-center backdrop-brightness-75"}
-            onClick={() => onClose()}
         >
             <div
                 className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-xl bg-white px-10 py-8"
@@ -62,7 +60,7 @@ function AddScentCategoryModal({ onClose, handleSubmit, isPending }: ModalPropTy
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        className="bg-blue-600 mt-8 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
                         Submit
                     </Button>

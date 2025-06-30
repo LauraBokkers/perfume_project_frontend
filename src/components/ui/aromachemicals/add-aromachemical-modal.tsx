@@ -77,7 +77,6 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
 
     return (
         <div
-            id="mail-modal"
             className={"fixed inset-0 z-10 p-10 flex items-center justify-center backdrop-brightness-75"}
         >
             <div
@@ -122,7 +121,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                                 <Button
                                     onClick={() => setIsModalOpen(true)}
                                     type="button"
-                                    className="bg-blue-600 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                                    className="bg-blue-600 mt-8 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                 > Select scent category('s)
                                 </Button>
                                 {isModalOpen && <ScentCategoryModal setScentCategories={setScentCategories} onClose={() => setIsModalOpen(false)} initialScentCategories={scentCategories} />}

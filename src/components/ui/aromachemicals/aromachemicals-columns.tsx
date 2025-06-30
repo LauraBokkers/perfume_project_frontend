@@ -41,7 +41,8 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                     </div>
                 );
             },
-            maxSize: 50
+            maxSize: 50,
+
         },
         {
             accessorKey: "description",
@@ -109,7 +110,7 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                 )
             },
             maxSize: 50,
-            size: 20
+            size: 40
         },
         {
             accessorKey: "edit",
@@ -129,7 +130,7 @@ export function getColumns({ handleDeleteAromachemical, handleEditAromachemical 
                 )
             },
             maxSize: 50,
-            size: 20
+            size: 40
         }
     ]
     return columns

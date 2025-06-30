@@ -45,7 +45,6 @@ const EditScentCategoryModal = ({ onClose, scentCategory, handleSubmit }: EditSc
 
     return (
         <div
-            id="mail-modal"
             className={"fixed inset-0 z-50 mx-2 flex items-center justify-center backdrop-brightness-75"}
             onClick={() => onClose()}
         >

@@ -39,7 +39,8 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
     searchField?: string
     showAddButton?: boolean
-    handleClickAdd: () => void
+    handleClickAdd: () => void,
+    initialVisibility?: Record<keyof TData, boolean>
 }
 
 export function DataTable<TData, TValue>({
@@ -47,7 +48,8 @@ export function DataTable<TData, TValue>({
     data,
     searchField,
     showAddButton = false,
-    handleClickAdd
+    handleClickAdd,
+    initialVisibility
 }: DataTableProps<TData, TValue>) {
 
 
@@ -63,7 +65,7 @@ export function DataTable<TData, TValue>({
     )
 
     const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
+        React.useState<VisibilityState>(initialVisibility ?? {})
 
     const table = useReactTable({
         data: data,
@@ -93,7 +95,7 @@ export function DataTable<TData, TValue>({
 
 
     return (
-        <div>
+        <div className="min-w-[800px]">
             <div className="flex gap-4 items-center py-4">
                 {searchField && <Input
                     placeholder="Filter names..."

@@ -26,9 +26,7 @@ const AddFormulalinesModal = ({ onClose, onConfirm }: ModalPropType) => {
 
     return (
         <div
-            id="mail-modal"
             className="fixed inset-0 z-50 mx-2 flex items-center justify-center backdrop-brightness-75"
-            onClick={onClose}
         >
             <div
                 className="shadow-hover relative flex h-auto w-auto flex-col gap-6 rounded-xl bg-white px-10 py-8"

@@ -173,7 +173,7 @@ export default function FormulationsTable() {
     })
 
     return (
-        <div className="p-10 bg-custom-table rounded-xl">
+        <div className="p-10 bg-custom-table rounded-xl overflow-x-scroll">
             {data && <DataTable
                 columns={getColumns({ handleDeleteFormulation: setFormulationToDelete, handleViewFormulation: setFormulationId, handleEditFormulation: setFormulationToEdit })}
                 data={data}

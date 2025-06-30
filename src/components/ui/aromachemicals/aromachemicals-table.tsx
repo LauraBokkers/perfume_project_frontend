@@ -181,13 +181,24 @@ export default function AromachemicalsTable() {
     if (isError) return <pre>{JSON.stringify(error)}</pre>
 
     return (
-        <div className="p-10 bg-custom-table rounded-xl">
+        <div className="p-10 bg-custom-table rounded-xl overflow-x-scroll">
             {data && <DataTable
                 columns={getColumns({ handleDeleteAromachemical: setAromachemicalToDelete, handleEditAromachemical: setAromachemicalToEdit })}
                 data={data}
                 searchField='name'
                 handleClickAdd={() => setIsDialogOpen(true)}
-                showAddButton />}
+                showAddButton
+                initialVisibility={{
+                    id: false,
+                    name: true,
+                    description: true,
+                    scent_category: true,
+                    dilution_material: false,
+                    IFRA_limit: false,
+                    odor_strength: false,
+                    persistence: false,
+                    supplier: false
+                }} />}
 
             {isDialogOpen && <AddModal
                 onAddAromachemical={newAromaChemicalMutation.mutate}

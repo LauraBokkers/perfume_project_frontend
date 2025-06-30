@@ -40,9 +40,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
 
     return (
         <div
-            id="mail-modal"
             className="fixed inset-0 z-50 mx-2 flex items-center justify-center backdrop-brightness-75"
-            onClick={() => onClose()}
         >
             <div
                 className="shadow-hover relative flex flex-col gap-6 rounded-xl bg-white px-6 py-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
@@ -202,7 +200,7 @@ const EditModal = ({ onClose, handleSubmit, aromachemical, isPending }: ModalPro
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="bg-custom-accentLight hover:bg-custom-background text-black py-2 px-4 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        className="bg-blue-600 mt-8 text-white py-2 px-4 rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
                         Submit
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 ml-2">
