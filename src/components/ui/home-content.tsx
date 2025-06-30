@@ -9,6 +9,14 @@ export const HomeContent = () => {
         back-end kennis heb, en dit kan deployen en beheren.
       </p>
       <p>
+        Omdat het mijn ambitie is om parfum te leren maken, leek het me leuk om
+        die hobby te combineren met coderen. Deze app is een tool om parfums mee
+        te formuleren. Onder de tab ‘Aromachemicals’ vind je alle grondstoffen
+        met hun eigenschappen. Deze kun je gebruiken om een formulering te
+        maken, die je vindt onder ‘Formulations’. Het is ook mogelijk om
+        geurcategorieën aan te passen of toe te voegen.
+      </p>
+      <p>
         {" "}
         De front-end is geschreven in <b>Typescript</b> met <b>React</b> (
         <b>Vite</b>), <b>Tailwind</b> voor styling en <b>ShadCN</b> voor
