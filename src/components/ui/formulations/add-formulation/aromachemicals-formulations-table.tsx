@@ -6,23 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "../../generic-data-table";
-
 import { getFormulationSelectColumns } from "./aromachemicals-formulations-columns";
 import {
   Aromachemical,
   fetchAromachemicals,
+  Persistence,
+  PersistenceSchema,
+  OdorStrength,
+  OdorStrengthSchema,
+  Solvent,
+  SolventSchema,
 } from "@/data-services/fetch-aromachemicals";
-
-// ---- Types voor filters ----
-type PersistenceValue =
-  | "Top"
-  | "Middle"
-  | "Base"
-  | "High"
-  | "Bottom"
-  | "Undefined"
-  | (string & {});
-type Category = { id: number; category: string };
 
 // ---- Props ----
 type Props = {
@@ -34,13 +28,15 @@ type Props = {
   initialSelectedIds?: number[];
 };
 
+type Category = { id: number; category: string };
+
 export default function AromachemicalsFormulationTable({
   onCancel,
   onNext,
   initialSelectedIds = [],
 }: Props) {
   // Data
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<Aromachemical[]>({
     queryKey: ["aromachemicals", "for-formulation"],
     queryFn: fetchAromachemicals,
   });
@@ -50,9 +46,19 @@ export default function AromachemicalsFormulationTable({
   const [selectedIds, setSelectedIds] = React.useState<Set<number>>(
     new Set(initialSelectedIds)
   );
+
   const [persistenceFilter, setPersistenceFilter] = React.useState<
-    Set<PersistenceValue>
+    Set<Persistence>
   >(new Set());
+
+  const [odorStrengthFilter, setOdorStrengthFilter] = React.useState<
+    Set<OdorStrength>
+  >(new Set());
+
+  const [solventFilter, setSolventFilter] = React.useState<Set<Solvent>>(
+    new Set()
+  );
+
   const [categoryFilter, setCategoryFilter] = React.useState<Set<number>>(
     new Set()
   );
@@ -81,8 +87,26 @@ export default function AromachemicalsFormulationTable({
     });
   };
 
-  const togglePersistence = (value: PersistenceValue) => {
+  const togglePersistence = (value: Persistence) => {
     setPersistenceFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+  };
+
+  const toggleOdorStrength = (value: OdorStrength) => {
+    setOdorStrengthFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+  };
+
+  const toggleSolvent = (value: Solvent) => {
+    setSolventFilter((prev) => {
       const next = new Set(prev);
       if (next.has(value)) next.delete(value);
       else next.add(value);
@@ -103,19 +127,40 @@ export default function AromachemicalsFormulationTable({
   const filteredData = React.useMemo(() => {
     let rows = data ?? [];
 
+    // tekst-zoek
     if (search.trim()) {
       const q = search.toLowerCase();
       rows = rows.filter((r) => r.name.toLowerCase().includes(q));
     }
 
+    // persistence filter
     if (persistenceFilter.size > 0) {
       rows = rows.filter((r) =>
         r.persistence
-          ? persistenceFilter.has(r.persistence as PersistenceValue)
+          ? persistenceFilter.has(r.persistence as Persistence)
           : persistenceFilter.has("Undefined")
       );
     }
 
+    // odor strength filter
+    if (odorStrengthFilter.size > 0) {
+      rows = rows.filter((r) =>
+        r.odor_strength
+          ? odorStrengthFilter.has(r.odor_strength as OdorStrength)
+          : odorStrengthFilter.has("Undefined")
+      );
+    }
+
+    // solvent / dilution_material filter
+    if (solventFilter.size > 0) {
+      rows = rows.filter((r) =>
+        r.dilution_material
+          ? solventFilter.has(r.dilution_material as Solvent)
+          : solventFilter.has("Undefined")
+      );
+    }
+
+    // categorie filter
     if (categoryFilter.size > 0) {
       rows = rows.filter((r) =>
         r.scent_category?.some((c) => categoryFilter.has(c.id))
@@ -123,7 +168,14 @@ export default function AromachemicalsFormulationTable({
     }
 
     return rows;
-  }, [data, search, persistenceFilter, categoryFilter]);
+  }, [
+    data,
+    search,
+    persistenceFilter,
+    odorStrengthFilter,
+    solventFilter,
+    categoryFilter,
+  ]);
 
   // Kolommen
   const columns = React.useMemo(
@@ -147,7 +199,7 @@ export default function AromachemicalsFormulationTable({
   return (
     <div className="space-y-4">
       {/* Toolbar boven de tabel: zoek + filters  */}
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:flex-wrap">
         <Input
           placeholder="Zoek op naam…"
           value={search}
@@ -155,18 +207,52 @@ export default function AromachemicalsFormulationTable({
           className="max-w-sm rounded-xl"
         />
 
-        {/* Persistence filters (chips met checkbox) */}
+        {/* Persistence filters (chips) */}
         <div className="flex flex-wrap items-center gap-2">
-          {["Top", "Middle", "Base", "High", "Bottom", "Undefined"].map((p) => {
-            const active = persistenceFilter.has(p as PersistenceValue);
+          {PersistenceSchema.options.map((p) => {
+            const active = persistenceFilter.has(p);
             return (
               <Badge
                 key={p}
                 variant={active ? "default" : "secondary"}
                 className="cursor-pointer select-none"
-                onClick={() => togglePersistence(p as PersistenceValue)}
+                onClick={() => togglePersistence(p)}
               >
                 {p}
+              </Badge>
+            );
+          })}
+        </div>
+
+        {/* OdorStrength filters (chips) */}
+        <div className="flex flex-wrap items-center gap-2">
+          {OdorStrengthSchema.options.map((o) => {
+            const active = odorStrengthFilter.has(o);
+            return (
+              <Badge
+                key={o}
+                variant={active ? "default" : "secondary"}
+                className="cursor-pointer select-none"
+                onClick={() => toggleOdorStrength(o)}
+              >
+                {o}
+              </Badge>
+            );
+          })}
+        </div>
+
+        {/* Solvent filters (chips) */}
+        <div className="flex flex-wrap items-center gap-2">
+          {SolventSchema.options.map((s) => {
+            const active = solventFilter.has(s);
+            return (
+              <Badge
+                key={s}
+                variant={active ? "default" : "secondary"}
+                className="cursor-pointer select-none"
+                onClick={() => toggleSolvent(s)}
+              >
+                {s}
               </Badge>
             );
           })}
@@ -206,7 +292,6 @@ export default function AromachemicalsFormulationTable({
         showAddButton={false}
         initialVisibility={
           {
-            // select kolom heeft id "select" en is niet hideable (enableHiding:false)
             name: true,
             persistence: true,
             scent_category: true,
