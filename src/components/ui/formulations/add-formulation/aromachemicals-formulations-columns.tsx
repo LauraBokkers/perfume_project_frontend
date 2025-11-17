@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Aromachemical } from "../../aromachemicals/aromachemicals-table";
+import { Aromachemical } from "@/data-services/fetch-aromachemicals";
 
 type ColumnProps = {
   // staat voor selectie wordt in de parent (wrapper) beheerd

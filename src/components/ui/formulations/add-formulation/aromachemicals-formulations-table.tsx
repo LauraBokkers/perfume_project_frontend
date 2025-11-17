@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTable } from "../../generic-data-table";
-import { API_BASE_URL } from "@/constants";
+
 import { getFormulationSelectColumns } from "./aromachemicals-formulations-columns";
-import { Aromachemical } from "../../aromachemicals/aromachemicals-table";
+import {
+  Aromachemical,
+  fetchAromachemicals,
+} from "@/data-services/fetch-aromachemicals";
 
 // ---- Types voor filters ----
 type PersistenceValue =
@@ -20,25 +23,6 @@ type PersistenceValue =
   | "Undefined"
   | (string & {});
 type Category = { id: number; category: string };
-
-// ---- Fetch ----
-// Minimalistische fetcher: haalt alleen velden op die we hier nodig hebben.
-// Als je al een 'aromachemical-types.ts' + schema hebt, kun je die hier importeren en stricter parsen.
-async function fetchAromachemicalsLite(): Promise<Aromachemical[]> {
-  const res = await fetch(`${API_BASE_URL}/api/aromachemicals`);
-  if (!res.ok) throw new Error("Failed to fetch aromachemicals");
-  const data = await res.json();
-
-  // Map naar de velden die we gebruiken
-  return (data ?? []).map((a: any) => ({
-    id: a.id,
-    name: a.name,
-    persistence: a.persistence ?? null,
-    scent_category: Array.isArray(a.scent_category)
-      ? a.scent_category.map((c: any) => ({ id: c.id, category: c.category }))
-      : [],
-  })) as Aromachemical[];
-}
 
 // ---- Props ----
 type Props = {
@@ -58,7 +42,7 @@ export default function AromachemicalsFormulationTable({
   // Data
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["aromachemicals", "for-formulation"],
-    queryFn: fetchAromachemicalsLite,
+    queryFn: fetchAromachemicals,
   });
 
   // UI state (client-side filters & selectie)

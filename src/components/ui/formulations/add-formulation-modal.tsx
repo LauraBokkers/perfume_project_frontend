@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import CloseIcon from "../../icons/close-icon";
 import { Formulation } from "./formulations-table";
 import AromachemicalsFormulationsTable from "./add-formulation/aromachemicals-formulations-table";
-import { Aromachemical } from "../aromachemicals/aromachemicals-table";
+import { Aromachemical } from "@/data-services/fetch-aromachemicals";
 
 type ModalPropType = {
   onClose: () => void;
