@@ -94,7 +94,7 @@ export default function AromachemicalsTable() {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading, isError } = useQuery({
+  const { data, error, isLoading, isError } = useQuery<Aromachemical[]>({
     queryKey: ["aromachemicals"],
     queryFn: () => fetchAromachemicals(),
   });

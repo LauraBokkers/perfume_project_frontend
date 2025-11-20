@@ -32,6 +32,7 @@ export function getFormulationSelectColumns(
           </div>
         );
       },
+      maxSize: 50,
       size: 40,
       enableSorting: false,
       enableHiding: false,
@@ -42,7 +43,8 @@ export function getFormulationSelectColumns(
       cell: ({ row }) => (
         <div className="truncate max-w-[260px]">{row.original.name}</div>
       ),
-      size: 260,
+      maxSize: 50,
+      size: 40,
     },
     {
       accessorKey: "persistence",
@@ -52,7 +54,8 @@ export function getFormulationSelectColumns(
           {row.original.persistence ?? "Undefined"}
         </div>
       ),
-      size: 120,
+      maxSize: 50,
+      size: 40,
     },
     {
       accessorKey: "scent_category",
@@ -68,7 +71,8 @@ export function getFormulationSelectColumns(
             : "-"}
         </div>
       ),
-      size: 260,
+      maxSize: 50,
+      size: 40,
       enableSorting: false, // sorteren op array is onhandig; filteren kan in wrapper
     },
   ];
