@@ -36,13 +36,30 @@ export default function AromachemicalsFormulationTable({
       });
     });
 
-    // 2. Set → Array
     return Array.from(set);
   }, [data]);
 
   const [selectedScentCategories, setSelectedScentCategories] = useState<
     Set<string>
   >(() => new Set());
+
+  const filteredData = React.useMemo(() => {
+    // Geen filters geselecteerd → laat alles zien
+    if (selectedScentCategories.size === 0) {
+      return data ?? [];
+    }
+
+    const selected = Array.from(selectedScentCategories);
+
+    return (data ?? []).filter((aroma) => {
+      const aromaCats = new Set(
+        (aroma.scent_category ?? []).map((c) => c.category)
+      );
+
+      // AND-logica: elk geselecteerd filter moet in aromaCats zitten
+      return selected.every((cat) => aromaCats.has(cat));
+    });
+  }, [data, selectedScentCategories]);
 
   // Selectie van rijen (ids van aromachemicals)
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
@@ -83,7 +100,7 @@ export default function AromachemicalsFormulationTable({
             selectedIds,
             onToggleSelect: toggleSelect,
           })}
-          data={data}
+          data={filteredData}
           searchField="name"
           handleClickAdd={() => {}}
           showAddButton={false}
