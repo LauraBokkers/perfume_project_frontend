@@ -8,6 +8,8 @@ import {
   fetchAromachemicals,
 } from "@/data-services/fetch-aromachemicals";
 import { getFormulationSelectColumns } from "./aromachemicals-formulations-columns";
+import React from "react";
+import { ScentCategoriesFilter } from "./scent-categories-filter";
 
 interface AromachemicalsFormulationsTablePropType {
   onCancel: () => void;
@@ -24,6 +26,23 @@ export default function AromachemicalsFormulationTable({
     queryKey: ["aromachemicals", "for-formulation"],
     queryFn: () => fetchAromachemicals(),
   });
+
+  const allScentCategories = React.useMemo(() => {
+    const set = new Set<string>();
+
+    (data ?? []).forEach((aroma) => {
+      aroma.scent_category?.forEach((cat) => {
+        set.add(cat.category);
+      });
+    });
+
+    // 2. Set → Array
+    return Array.from(set);
+  }, [data]);
+
+  const [selectedScentCategories, setSelectedScentCategories] = useState<
+    Set<string>
+  >(() => new Set());
 
   // Selectie van rijen (ids van aromachemicals)
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
@@ -50,6 +69,14 @@ export default function AromachemicalsFormulationTable({
 
   return (
     <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4">
+      {allScentCategories && (
+        <ScentCategoriesFilter
+          allScentCategories={allScentCategories}
+          selectedScentCategories={selectedScentCategories}
+          setSelectedScentCategories={setSelectedScentCategories}
+        />
+      )}
+
       {data && (
         <DataTable<Aromachemical>
           columns={getFormulationSelectColumns({

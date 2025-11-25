@@ -73,7 +73,7 @@ export function getFormulationSelectColumns(
       ),
       maxSize: 50,
       size: 40,
-      enableSorting: false, // sorteren op array is onhandig; filteren kan in wrapper
+      enableSorting: false,
     },
   ];
 
