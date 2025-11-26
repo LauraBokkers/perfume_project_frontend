@@ -1,6 +1,12 @@
 // ui/formulations/add-formulation/ScentCategoriesFilter.tsx
 import * as React from "react";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu";
 
 type ScentCategoriesFilterProps = {
   // Alle beschikbare categorie-namen
@@ -31,27 +37,52 @@ export function ScentCategoriesFilter({
     });
   };
 
-  return (
-    <div className="flex flex-wrap gap-2 mb-2">
-      {allScentCategories.map((cat) => {
-        const isActive = selectedScentCategories.has(cat);
+  const selectedCount = selectedScentCategories.size;
+  const selectedList = Array.from(selectedScentCategories);
 
-        return (
-          <Badge
-            key={cat}
-            variant={isActive ? "default" : "secondary"}
-            className={
-              "cursor-pointer select-none transition" +
-              (isActive
-                ? " bg-blue-600 text-white border border-blue-800 shadow-sm"
-                : " bg-gray-50 text-black border border-gray-300 opacity-80 hover:opacity-100")
-            }
-            onClick={() => toggleCategory(cat)}
+  return (
+    <div className="flex flex-col gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            className="rounded-xl justify-between w-[180px]"
           >
-            {cat}
-          </Badge>
-        );
-      })}
+            {selectedCount === 0
+              ? "Filter op scent category"
+              : `Scent categories (${selectedCount} geselecteerd)`}
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto">
+          {allScentCategories.map((cat) => {
+            const checked = selectedScentCategories.has(cat);
+            return (
+              <DropdownMenuCheckboxItem
+                key={cat}
+                checked={checked}
+                onCheckedChange={() => toggleCategory(cat)}
+                className="cursor-pointer"
+              >
+                {cat}
+              </DropdownMenuCheckboxItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {selectedCount > 0 && (
+        <div className="flex flex-wrap gap-1 text-xs text-gray-700">
+          {selectedList.map((cat) => (
+            <span
+              key={cat}
+              className="px-2 py-0.5 rounded-full bg-custom-accentLight/60"
+            >
+              {cat}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

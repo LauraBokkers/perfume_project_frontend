@@ -10,6 +10,8 @@ import {
 import { getFormulationSelectColumns } from "./aromachemicals-formulations-columns";
 import React from "react";
 import { ScentCategoriesFilter } from "./scent-categories-filter";
+import { persistenceValues } from "@/data-services/fetch-aromachemicals";
+import { PersistenceFilter } from "./persistence-filter";
 
 interface AromachemicalsFormulationsTablePropType {
   onCancel: () => void;
@@ -39,32 +41,39 @@ export default function AromachemicalsFormulationTable({
     return Array.from(set);
   }, [data]);
 
-  const [selectedScentCategories, setSelectedScentCategories] = useState<
-    Set<string>
-  >(() => new Set());
-
-  const filteredData = React.useMemo(() => {
-    // Geen filters geselecteerd → laat alles zien
-    if (selectedScentCategories.size === 0) {
-      return data ?? [];
-    }
-
-    const selected = Array.from(selectedScentCategories);
-
-    return (data ?? []).filter((aroma) => {
-      const aromaCats = new Set(
-        (aroma.scent_category ?? []).map((c) => c.category)
-      );
-
-      // AND-logica: elk geselecteerd filter moet in aromaCats zitten
-      return selected.every((cat) => aromaCats.has(cat));
-    });
-  }, [data, selectedScentCategories]);
-
   // Selectie van rijen (ids van aromachemicals)
   const [selectedIds, setSelectedIds] = useState<Set<number>>(
     () => new Set(initialSelectedIds)
   );
+
+  const [selectedScentCategories, setSelectedScentCategories] = useState<
+    Set<string>
+  >(() => new Set());
+
+  const [selectedPersistence, setSelectedPersistence] = useState<string | null>(
+    null
+  );
+
+  const filteredData = React.useMemo(() => {
+    let rows = data ?? [];
+
+    // filter op scent categories (AND)
+    if (selectedScentCategories.size > 0) {
+      rows = rows.filter((aroma) => {
+        const aromaCats = aroma.scent_category?.map((c) => c.category) ?? [];
+        return Array.from(selectedScentCategories).every((selectedCat) =>
+          aromaCats.includes(selectedCat)
+        );
+      });
+    }
+
+    // filter op persistence
+    if (selectedPersistence) {
+      rows = rows.filter((aroma) => aroma.persistence === selectedPersistence);
+    }
+
+    return rows;
+  }, [data, selectedScentCategories, selectedPersistence]);
 
   const toggleSelect = (item: Aromachemical) => {
     setSelectedIds((prev) => {
@@ -91,6 +100,13 @@ export default function AromachemicalsFormulationTable({
           allScentCategories={allScentCategories}
           selectedScentCategories={selectedScentCategories}
           setSelectedScentCategories={setSelectedScentCategories}
+        />
+      )}
+      {persistenceValues && (
+        <PersistenceFilter
+          persistenceValues={persistenceValues}
+          selectedPersistence={selectedPersistence}
+          setSelectedPersistence={setSelectedPersistence}
         />
       )}
 

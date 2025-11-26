@@ -18,14 +18,18 @@ export const SupplierSchema = z.enum([
   "Givaudan",
   "Hekserij",
 ]);
-export const PersistenceSchema = z.enum([
+
+export const persistenceValues = [
   "Undefined",
   "Top",
   "High",
   "Middle",
   "Bottom",
   "Base",
-]);
+] as const;
+
+export const PersistenceSchema = z.enum(persistenceValues);
+
 export const SolventSchema = z.enum([
   "Undefined",
   "DPG",
