@@ -22,14 +22,14 @@ export function PersistenceFilter({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="rounded-xl cursor-pointer">
+        <Button className="rounded-xl">
           {selectedPersistence ?? "Filter op persistence"}
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-40">
+      <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[180px]">
         <DropdownMenuItem
-          className="cursor-pointer hover:bg-custom-accentLight text-sm"
+          className="cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight"
           onClick={() => setSelectedPersistence(null)}
         >
           Alle
@@ -38,7 +38,7 @@ export function PersistenceFilter({
         {persistenceValues.map((value) => (
           <DropdownMenuItem
             key={value}
-            className={`cursor-pointer hover:bg-custom-accentLight text-sm ${
+            className={`cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight ${
               selectedPersistence === value ? "font-semibold" : ""
             }`}
             onClick={() => setSelectedPersistence(value)}

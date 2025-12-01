@@ -84,8 +84,8 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
         </div>
 
         <form onSubmit={handleFormSubmit}>
-          {/* Titelveld (geldig voor beide stappen) */}
-          <div className="mb-4">
+          {/* Titel-blok */}
+          <div className="mb-4 max-w-[700px] mx-auto rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">
             <label htmlFor="name" className="block mb-1">
               Title:
             </label>
@@ -95,99 +95,99 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="border border-gray-300 rounded px-3 py-1"
+              className="border border-gray-300 rounded px-3 py-1 w-full"
             />
           </div>
-
           {/* STAP 1: aromachemicals selecteren */}
-          {step === 1 && (
-            <AromachemicalsFormulationsTable
-              onCancel={closeModal}
-              onNext={(selected) => {
-                setSelectedAromas(selected);
-                // eventueel vorige quantities schonen voor niet meer geselecteerde
-                setQuantities((prev) => {
-                  const next: Record<number, number | undefined> = {};
-                  selected.forEach((a) => {
-                    next[a.id] = prev[a.id]; // behoud bestaande waarde als die er was
+          <div className="mb-4 max-w-[700px] mx-auto rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">
+            {step === 1 && (
+              <AromachemicalsFormulationsTable
+                onCancel={closeModal}
+                onNext={(selected) => {
+                  setSelectedAromas(selected);
+                  setQuantities((prev) => {
+                    const next: Record<number, number | undefined> = {};
+                    selected.forEach((a) => {
+                      next[a.id] = prev[a.id];
+                    });
+                    return next;
                   });
-                  return next;
-                });
-                setStep(2);
-              }}
-              initialSelectedIds={selectedAromas.map((a) => a.id)}
-            />
-          )}
+                  setStep(2);
+                }}
+                initialSelectedIds={selectedAromas.map((a) => a.id)}
+              />
+            )}
 
-          {/* STAP 2: hoeveelheden invullen */}
-          {step === 2 && (
-            <div className="mt-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">
-                  Quantities for selected aromachemicals
-                </h2>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={goBackToStep1}
-                  className="rounded-xl"
-                >
-                  Terug naar selectie
-                </Button>
-              </div>
+            {/* STAP 2: hoeveelheden invullen */}
+            {step === 2 && (
+              <div className="mt-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">
+                    Quantities for selected aromachemicals
+                  </h2>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={goBackToStep1}
+                    className="rounded-xl"
+                  >
+                    Terug naar selectie
+                  </Button>
+                </div>
 
-              <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-custom-accentLight">
-                    <tr>
-                      <th className="px-4 py-2 text-left">Aroma Chemical</th>
-                      <th className="px-4 py-2 text-left">Quantity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedAromas.map((a) => (
-                      <tr key={a.id}>
-                        <td className="border px-4 py-2">{a.name}</td>
-                        <td className="border px-4 py-2">
-                          <input
-                            type="number"
-                            min={0}
-                            value={quantities[a.id] ?? ""}
-                            onChange={(e) =>
-                              setQuantities((prev) => ({
-                                ...prev,
-                                [a.id]: e.target.value
-                                  ? Number(e.target.value)
-                                  : undefined,
-                              }))
-                            }
-                            className="border border-gray-300 rounded px-3 py-1 w-32"
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                    {selectedAromas.length === 0 && (
+                <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden">
+                  <table className="w-full">
+                    <thead className="bg-custom-accentLight">
                       <tr>
-                        <td
-                          colSpan={2}
-                          className="border px-4 py-2 text-center text-sm opacity-70"
-                        >
-                          Geen aromachemicals geselecteerd.
-                        </td>
+                        <th className="px-4 py-2 text-left">Aroma Chemical</th>
+                        <th className="px-4 py-2 text-left">Quantity</th>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {selectedAromas.map((a) => (
+                        <tr key={a.id}>
+                          <td className="border px-4 py-2">{a.name}</td>
+                          <td className="border px-4 py-2">
+                            <input
+                              type="number"
+                              min={0}
+                              value={quantities[a.id] ?? ""}
+                              onChange={(e) =>
+                                setQuantities((prev) => ({
+                                  ...prev,
+                                  [a.id]: e.target.value
+                                    ? Number(e.target.value)
+                                    : undefined,
+                                }))
+                              }
+                              className="border border-gray-300 rounded px-3 py-1 w-32"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                      {selectedAromas.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan={2}
+                            className="border px-4 py-2 text-center text-sm opacity-70"
+                          >
+                            Geen aromachemicals geselecteerd.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-              {isSubmitDisabled && (
-                <p className="text-sm text-red-600">
-                  Vul voor alle geselecteerde aromachemicals een hoeveelheid
-                  &gt; 0 in.
-                </p>
-              )}
-            </div>
-          )}
+                {isSubmitDisabled && (
+                  <p className="text-sm text-red-600">
+                    Vul voor alle geselecteerde aromachemicals een hoeveelheid
+                    &gt; 0 in.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Submit-knop onderaan: alleen actief in stap 2 en als alles geldig is */}
           <Button

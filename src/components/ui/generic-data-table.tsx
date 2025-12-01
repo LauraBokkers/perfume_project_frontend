@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   showAddButton?: boolean;
   handleClickAdd: () => void;
   initialVisibility?: VisibilityState;
+  headerExtras?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue = unknown>({
@@ -49,6 +50,7 @@ export function DataTable<TData, TValue = unknown>({
   showAddButton = false,
   handleClickAdd,
   initialVisibility,
+  headerExtras,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -95,6 +97,7 @@ export function DataTable<TData, TValue = unknown>({
 
   return (
     <div className="w-full">
+      {/* TOOLBAR */}
       <div className="flex gap-4 items-center py-4">
         {searchField && (
           <Input
@@ -108,7 +111,6 @@ export function DataTable<TData, TValue = unknown>({
             className="max-w-sm rounded-xl border-black border-opacity-50"
           />
         )}
-
         {showAddButton && (
           <Button className="rounded-xl" onClick={handleClickAdd}>
             {" "}
@@ -172,6 +174,10 @@ export function DataTable<TData, TValue = unknown>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {headerExtras && (
+        <div className="flex justify-end pb-2">{headerExtras}</div>
+      )}
       <div className="w-full flex items-center justify-center my-4">
         {/* Pagination Buttons */}
         <div className="flex flex-row justify-evenly w-full">

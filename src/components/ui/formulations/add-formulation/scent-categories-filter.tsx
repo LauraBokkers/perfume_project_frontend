@@ -9,11 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type ScentCategoriesFilterProps = {
-  // Alle beschikbare categorie-namen
   allScentCategories: string[];
-  // Geselecteerde categorieën (als Set<string>)
   selectedScentCategories: Set<string>;
-  // Setter uit de parent
   setSelectedScentCategories: React.Dispatch<React.SetStateAction<Set<string>>>;
 };
 
@@ -44,17 +41,15 @@ export function ScentCategoriesFilter({
     <div className="flex flex-col gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            className="rounded-xl justify-between w-[180px]"
-          >
+          {/* Zelfde stijl als andere buttons */}
+          <Button className="rounded-xl">
             {selectedCount === 0
               ? "Filter op scent category"
               : `Scent categories (${selectedCount} geselecteerd)`}
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto">
+        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[180px]">
           {allScentCategories.map((cat) => {
             const checked = selectedScentCategories.has(cat);
             return (
@@ -62,7 +57,7 @@ export function ScentCategoriesFilter({
                 key={cat}
                 checked={checked}
                 onCheckedChange={() => toggleCategory(cat)}
-                className="cursor-pointer"
+                className="cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight"
               >
                 {cat}
               </DropdownMenuCheckboxItem>
