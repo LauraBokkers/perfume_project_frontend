@@ -22,7 +22,7 @@ export function PersistenceFilter({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="rounded-xl">
+        <Button className="rounded-xl justify-center w-[155px]">
           {selectedPersistence ?? "Filter op persistence"}
         </Button>
       </DropdownMenuTrigger>

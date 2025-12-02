@@ -41,11 +41,10 @@ export function ScentCategoriesFilter({
     <div className="flex flex-col gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          {/* Zelfde stijl als andere buttons */}
-          <Button className="rounded-xl">
+          <Button className="rounded-xl justify-center w-[155px]">
             {selectedCount === 0
-              ? "Filter op scent category"
-              : `Scent categories (${selectedCount} geselecteerd)`}
+              ? "Filter Scent Category"
+              : `Scent Categories (${selectedCount})`}
           </Button>
         </DropdownMenuTrigger>
 
@@ -67,7 +66,7 @@ export function ScentCategoriesFilter({
       </DropdownMenu>
 
       {selectedCount > 0 && (
-        <div className="flex flex-wrap gap-1 text-xs text-gray-700">
+        <div className="flex flex-wrap gap-1 text-[13px]">
           {selectedList.map((cat) => (
             <span
               key={cat}

@@ -130,7 +130,7 @@ export default function AromachemicalsFormulationTable({
           }}
           // extra header boven de standaard toolbar
           headerExtras={
-            <div className="flex gap-1">
+            <div className="flex gap-4">
               <PersistenceFilter
                 persistenceValues={persistenceValues}
                 selectedPersistence={selectedPersistence}

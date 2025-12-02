@@ -108,7 +108,7 @@ export function DataTable<TData, TValue = unknown>({
             onChange={(event) =>
               table.getColumn(searchField)?.setFilterValue(event.target.value)
             }
-            className="max-w-sm rounded-xl border-black border-opacity-50"
+            className="max-w-[282px] rounded-xl border-black border-opacity-50"
           />
         )}
         {showAddButton && (
@@ -135,7 +135,7 @@ export function DataTable<TData, TValue = unknown>({
         {/* Page Size Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="rounded-xl">{`Change page size (${pagination.pageSize})`}</Button>
+            <Button className="rounded-xl justify-center w-[155px]">{`Page size (${pagination.pageSize})`}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white rounded-xl ">
             {[10, 20, 30, 40, 50].map((size) => (
@@ -151,7 +151,9 @@ export function DataTable<TData, TValue = unknown>({
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="ml-auto rounded-xl">Show/hide columns</Button>
+            <Button className="rounded-xl justify-center w-[155px]">
+              Show/hide columns
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white rounded-xl">
             {table
