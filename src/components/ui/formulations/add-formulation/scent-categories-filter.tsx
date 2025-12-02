@@ -43,12 +43,12 @@ export function ScentCategoriesFilter({
         <DropdownMenuTrigger asChild>
           <Button className="rounded-xl justify-center w-[155px]">
             {selectedCount === 0
-              ? "Filter Scent Category"
+              ? "Scent Category filter"
               : `Scent Categories (${selectedCount})`}
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[180px]">
+        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[155px]">
           {allScentCategories.map((cat) => {
             const checked = selectedScentCategories.has(cat);
             return (

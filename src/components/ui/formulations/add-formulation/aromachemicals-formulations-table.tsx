@@ -57,10 +57,10 @@ export default function AromachemicalsFormulationTable({
     Set<string>
   >(() => new Set());
 
-  // geselecteerde persistence (single value of null = alle)
-  const [selectedPersistence, setSelectedPersistence] = useState<string | null>(
-    null
-  );
+  // geselecteerde persistence
+  const [selectedPersistence, setSelectedPersistence] = React.useState<
+    Set<string>
+  >(new Set());
 
   // ------------ FILTER LOGICA ------------
 
@@ -77,9 +77,11 @@ export default function AromachemicalsFormulationTable({
       });
     }
 
-    // filter op persistence (exact match)
-    if (selectedPersistence) {
-      rows = rows.filter((aroma) => aroma.persistence === selectedPersistence);
+    // filter op persistence (AND)
+    if (selectedPersistence.size > 0) {
+      rows = rows.filter((aroma) =>
+        selectedPersistence.has(aroma.persistence ?? "")
+      );
     }
 
     return rows;
