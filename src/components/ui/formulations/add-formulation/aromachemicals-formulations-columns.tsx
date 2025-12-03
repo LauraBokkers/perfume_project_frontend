@@ -26,14 +26,15 @@ export function getFormulationSelectColumns(
           <div className="flex items-center justify-center">
             <Checkbox
               checked={checked}
+              onClick={(e) => e.stopPropagation()}
               onCheckedChange={() => onToggleSelect(item)}
               aria-label={`Select ${item.name}`}
             />
           </div>
         );
       },
-      maxSize: 50,
-      size: 40,
+      maxSize: 30,
+      size: 20,
       enableSorting: false,
       enableHiding: false,
     },
@@ -54,25 +55,21 @@ export function getFormulationSelectColumns(
           {row.original.persistence ?? "Undefined"}
         </div>
       ),
-      maxSize: 50,
-      size: 40,
+      maxSize: 40,
+      size: 20,
     },
     {
       accessorKey: "scent_category",
       header: "Scent Category",
       cell: ({ row }) => (
-        <div className="flex flex-wrap gap-1">
+        <div className="truncate">
           {row.original.scent_category?.length
-            ? row.original.scent_category.map((c) => (
-                <Badge key={c.id} variant="secondary">
-                  {c.category}
-                </Badge>
-              ))
+            ? row.original.scent_category.map((c) => c.category).join(", ")
             : "-"}
         </div>
       ),
       maxSize: 50,
-      size: 40,
+      size: 30,
       enableSorting: false,
     },
   ];

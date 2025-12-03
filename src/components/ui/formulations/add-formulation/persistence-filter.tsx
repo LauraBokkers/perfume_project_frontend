@@ -60,7 +60,7 @@ export function PersistenceFilter({
       </DropdownMenu>
 
       {selectedCount > 0 && (
-        <div className="flex flex-wrap gap-1 text-[13px]">
+        <div className="flex flex-wrap gap-1 text-[13px] w-[155px]">
           {selectedList.map((value) => (
             <span
               key={value}

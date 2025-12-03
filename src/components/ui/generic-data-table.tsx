@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +42,9 @@ interface DataTableProps<TData, TValue> {
   handleClickAdd: () => void;
   initialVisibility?: VisibilityState;
   headerExtras?: React.ReactNode;
+  /** extra classes voor table rows – optioneel */
+  highlightRowsOnHover?: boolean;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue = unknown>({
@@ -51,6 +55,8 @@ export function DataTable<TData, TValue = unknown>({
   handleClickAdd,
   initialVisibility,
   headerExtras,
+  highlightRowsOnHover = false,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -58,7 +64,6 @@ export function DataTable<TData, TValue = unknown>({
   });
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -83,7 +88,6 @@ export function DataTable<TData, TValue = unknown>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-
     columnResizeMode: "onChange",
     enableColumnResizing: true,
   });
@@ -149,6 +153,7 @@ export function DataTable<TData, TValue = unknown>({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="rounded-xl justify-center w-[155px]">
@@ -180,8 +185,9 @@ export function DataTable<TData, TValue = unknown>({
       {headerExtras && (
         <div className="flex justify-end pb-2">{headerExtras}</div>
       )}
+
+      {/* bovenste pagination */}
       <div className="w-full flex items-center justify-center my-4">
-        {/* Pagination Buttons */}
         <div className="flex flex-row justify-evenly w-full">
           <Button
             variant="outline"
@@ -229,6 +235,7 @@ export function DataTable<TData, TValue = unknown>({
           </Button>
         </div>
       </div>
+
       <div className="border-custom-background border-2 rounded-xl border-opacity-80 overflow-hidden w-full">
         <Table className="mx-auto w-full table-fixed">
           <TableHeader className="bg-custom-accentLight">
@@ -263,6 +270,11 @@ export function DataTable<TData, TValue = unknown>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={cn(
+                    highlightRowsOnHover &&
+                      "hover:bg-custom-accentLight/60 cursor-pointer transition-colors"
+                  )}
+                  onClick={() => onRowClick?.(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -287,8 +299,9 @@ export function DataTable<TData, TValue = unknown>({
           </TableBody>
         </Table>
       </div>
+
+      {/* onderste pagination */}
       <div className="w-full flex items-center justify-center my-4">
-        {/* Pagination Buttons */}
         <div className="flex flex-row justify-evenly w-full">
           <Button
             variant="outline"

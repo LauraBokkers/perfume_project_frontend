@@ -66,7 +66,7 @@ export function ScentCategoriesFilter({
       </DropdownMenu>
 
       {selectedCount > 0 && (
-        <div className="flex flex-wrap gap-1 text-[13px]">
+        <div className="flex flex-wrap gap-1 text-[13px] w-[155px]">
           {selectedList.map((cat) => (
             <span
               key={cat}

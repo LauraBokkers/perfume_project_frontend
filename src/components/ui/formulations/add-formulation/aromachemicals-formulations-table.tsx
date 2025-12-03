@@ -87,22 +87,25 @@ export default function AromachemicalsFormulationTable({
     return rows;
   }, [data, selectedScentCategories, selectedPersistence]);
 
+  // centrale toggle-functie (voor checkbox én rij-click)
+  const toggleSelect = React.useCallback((item: Aromachemical) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(item.id)) next.delete(item.id);
+      else next.add(item.id);
+      return next;
+    });
+  }, []);
+
   // ------------ TABEL KOLOMMEN ------------
 
   const columns = React.useMemo(
     () =>
       getFormulationSelectColumns({
         selectedIds,
-        onToggleSelect: (item: Aromachemical) => {
-          setSelectedIds((prev) => {
-            const next = new Set(prev);
-            if (next.has(item.id)) next.delete(item.id);
-            else next.add(item.id);
-            return next;
-          });
-        },
+        onToggleSelect: toggleSelect,
       }),
-    [selectedIds]
+    [selectedIds, toggleSelect]
   );
 
   // ------------ NAVIGATIE / BUTTONS ------------
@@ -145,6 +148,8 @@ export default function AromachemicalsFormulationTable({
               />
             </div>
           }
+          highlightRowsOnHover
+          onRowClick={toggleSelect}
         />
       )}
 
