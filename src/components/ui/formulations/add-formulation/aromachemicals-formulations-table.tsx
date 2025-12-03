@@ -150,6 +150,7 @@ export default function AromachemicalsFormulationTable({
           }
           highlightRowsOnHover
           onRowClick={toggleSelect}
+          isRowSelected={(row) => selectedIds.has(row.id)}
         />
       )}
 

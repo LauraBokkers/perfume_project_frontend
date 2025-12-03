@@ -45,6 +45,7 @@ interface DataTableProps<TData, TValue> {
   /** extra classes voor table rows – optioneel */
   highlightRowsOnHover?: boolean;
   onRowClick?: (row: TData) => void;
+  isRowSelected?: (row: TData) => boolean;
 }
 
 export function DataTable<TData, TValue = unknown>({
@@ -57,6 +58,7 @@ export function DataTable<TData, TValue = unknown>({
   headerExtras,
   highlightRowsOnHover = false,
   onRowClick,
+  isRowSelected,
 }: DataTableProps<TData, TValue>) {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -144,7 +146,7 @@ export function DataTable<TData, TValue = unknown>({
           <DropdownMenuContent className="bg-white rounded-xl ">
             {[10, 20, 30, 40, 50].map((size) => (
               <DropdownMenuItem
-                className="cursor-pointer hover:bg-custom-accentLight z-20"
+                className="cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight z-20"
                 key={size}
                 onClick={() => handlePageSizeChange(size)}
               >
@@ -168,7 +170,7 @@ export function DataTable<TData, TValue = unknown>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize cursor-pointer hover:bg-custom-accentLight z-10"
+                    className="capitalize cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight z-10"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
@@ -272,7 +274,8 @@ export function DataTable<TData, TValue = unknown>({
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
                     highlightRowsOnHover &&
-                      "hover:bg-custom-accentLight/60 cursor-pointer transition-colors"
+                      "hover:bg-custom-accentLight/60 cursor-pointer transition-colors",
+                    isRowSelected?.(row.original) && "bg-custom-accentLight/60"
                   )}
                   onClick={() => onRowClick?.(row.original)}
                 >
