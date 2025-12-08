@@ -118,7 +118,10 @@ export function DataTable<TData, TValue = unknown>({
           />
         )}
         {showAddButton && (
-          <Button className="rounded-xl" onClick={handleClickAdd}>
+          <Button
+            className="rounded-xl hover:bg-custom-accentLight/60"
+            onClick={handleClickAdd}
+          >
             {" "}
             Add
             <svg
