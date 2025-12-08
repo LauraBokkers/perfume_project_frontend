@@ -41,7 +41,7 @@ export function ScentCategoriesFilter({
     <div className="flex flex-col gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="rounded-xl justify-center w-[155px]">
+          <Button className="rounded-xl justify-center w-[155px] hover:bg-custom-accentLight/60">
             {selectedCount === 0
               ? "Scent Category filter"
               : `Scent Categories (${selectedCount})`}
@@ -56,7 +56,7 @@ export function ScentCategoriesFilter({
                 key={cat}
                 checked={checked}
                 onCheckedChange={() => toggleCategory(cat)}
-                className="cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight"
+                className="cursor-pointer text-sm hover:bg-custom-accentLight/60 focus:bg-custom-accentLight/60"
               >
                 {cat}
               </DropdownMenuCheckboxItem>

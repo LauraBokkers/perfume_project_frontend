@@ -141,12 +141,12 @@ export function DataTable<TData, TValue = unknown>({
         {/* Page Size Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="rounded-xl justify-center w-[155px]">{`Page size (${pagination.pageSize})`}</Button>
+            <Button className="rounded-xl justify-center w-[155px] hover:bg-custom-accentLight/60">{`Page size (${pagination.pageSize})`}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white rounded-xl ">
             {[10, 20, 30, 40, 50].map((size) => (
               <DropdownMenuItem
-                className="cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight z-20"
+                className="cursor-pointer text-sm hover:bg-custom-accentLight/60 focus:bg-custom-accentLight/60 z-20"
                 key={size}
                 onClick={() => handlePageSizeChange(size)}
               >
@@ -158,7 +158,7 @@ export function DataTable<TData, TValue = unknown>({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="rounded-xl justify-center w-[155px]">
+            <Button className="rounded-xl justify-center w-[155px] hover:bg-custom-accentLight/60">
               Show/hide columns
             </Button>
           </DropdownMenuTrigger>
@@ -170,7 +170,7 @@ export function DataTable<TData, TValue = unknown>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize cursor-pointer text-sm hover:bg-custom-accentLight focus:bg-custom-accentLight z-10"
+                    className="capitalize cursor-pointer text-sm hover:bg-custom-accentLight/60 focus:bg-custom-accentLight/60 z-10"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
