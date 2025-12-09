@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import CloseIcon from "../../icons/close-icon";
 import { useQuery } from "@tanstack/react-query";
 import { ScentCategorySchema } from "../../../data-services/fetch-aromachemicals";
 import { z } from "zod";
 import { Dispatch, SetStateAction, useState } from "react";
 import { API_BASE_URL } from "@/constants";
+import { CloseButton } from "../close-button";
 
 type ModalPropType = {
   onClose: () => void;
@@ -82,7 +82,7 @@ function ScentCategoryModal({
             className="absolute right-4 top-4 h-4 w-4 cursor-pointer"
             onClick={onClose}
           >
-            <CloseIcon height={14} width={14} fill="black" />
+            <CloseButton onClose={onClose} />
           </div>
           <h2 className="text-xl mb-4">Select your scent category</h2>
           {data ? (

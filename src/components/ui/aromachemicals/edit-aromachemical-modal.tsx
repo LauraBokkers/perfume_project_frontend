@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import CloseIcon from "../../icons/close-icon";
 import {
   OdorStrength,
   OdorStrengthSchema,
@@ -21,6 +20,7 @@ import {
   solventOptions,
   supplierOptions,
 } from "./aromachemical-types";
+import { CloseButton } from "../close-button";
 
 interface ModalPropType {
   onClose: () => void;
@@ -82,7 +82,7 @@ const EditModal = ({
           className="absolute right-4 top-4 h-4 w-4 cursor-pointer"
           onClick={() => onClose()}
         >
-          <CloseIcon height={14} width={14} fill="black" />
+          <CloseButton onClose={onClose} />
         </div>
 
         <form

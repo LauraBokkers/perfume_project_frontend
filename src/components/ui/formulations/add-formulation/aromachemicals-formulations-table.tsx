@@ -121,6 +121,7 @@ export default function AromachemicalsFormulationTable({
 
   return (
     <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4">
+      <h2 className="text-lg font-medium">Select aromachemicals</h2>
       {data && (
         <DataTable<Aromachemical>
           columns={columns}
@@ -161,15 +162,18 @@ export default function AromachemicalsFormulationTable({
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" onClick={onCancel} className="rounded-xl">
-            Annuleren
+          <Button
+            onClick={onCancel}
+            className="rounded-xl justify-center hover:bg-red-600 hover:bg-opacity-60 w-[100px]"
+          >
+            Cancel
           </Button>
           <Button
             onClick={handleNext}
             disabled={selectedIds.size === 0}
-            className="rounded-xl"
+            className="rounded-xl justify-center hover:bg-custom-accentLight/60 w-[100px]"
           >
-            Volgende ({selectedIds.size})
+            Next ({selectedIds.size})
           </Button>
         </div>
       </div>

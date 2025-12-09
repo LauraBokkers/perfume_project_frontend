@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import CloseIcon from "../../icons/close-icon";
 import {
   Aromachemical,
   AddAromachemicalSchema,
@@ -22,6 +21,7 @@ import {
   solventOptions,
   supplierOptions,
 } from "./aromachemical-types";
+import { CloseButton } from "../close-button";
 
 function ErrorLabel({ message }: { message: string }) {
   return <div className="text-xs text-red-600">{message}</div>;
@@ -110,7 +110,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
           className="absolute right-4 top-4 h-4 w-4 cursor-pointer"
           onClick={() => onClose()}
         >
-          <CloseIcon height={14} width={14} fill="black" />
+          <CloseButton onClose={onClose} />
         </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="grid lg:grid-cols-2 gap-8 grid-cols-1">
