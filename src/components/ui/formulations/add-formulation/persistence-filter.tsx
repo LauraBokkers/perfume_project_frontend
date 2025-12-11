@@ -42,11 +42,15 @@ export function PersistenceFilter({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[--radix-dropdown-menu-trigger-width]">
+        <DropdownMenuContent
+          className="bg-white rounded-xl max-h-64 overflow-auto w-[--radix-dropdown-menu-trigger-width]"
+          onClick={(e) => e.stopPropagation()}
+        >
           {persistenceValues.map((value) => {
             const checked = selectedPersistence.has(value);
             return (
               <DropdownMenuCheckboxItem
+                onClick={(e) => e.stopPropagation()}
                 key={value}
                 checked={checked}
                 onCheckedChange={() => togglePersistence(value)}

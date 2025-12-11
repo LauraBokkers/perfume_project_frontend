@@ -48,11 +48,15 @@ export function ScentCategoriesFilter({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="bg-white rounded-xl max-h-64 overflow-auto w-[155px]">
+        <DropdownMenuContent
+          className="bg-white rounded-xl max-h-64 overflow-auto w-[155px]"
+          onClick={(e) => e.stopPropagation()}
+        >
           {allScentCategories.map((cat) => {
             const checked = selectedScentCategories.has(cat);
             return (
               <DropdownMenuCheckboxItem
+                onClick={(e) => e.stopPropagation()}
                 key={cat}
                 checked={checked}
                 onCheckedChange={() => toggleCategory(cat)}

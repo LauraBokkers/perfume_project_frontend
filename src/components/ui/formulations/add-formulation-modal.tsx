@@ -44,6 +44,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
 
   // zijn alle geselecteerde aromachemicals voorzien van een geldige hoeveelheid?
   const isSubmitDisabled =
+    title.trim().length === 0 ||
     selectedAromas.length === 0 ||
     selectedAromas.some((a) => {
       const q = quantities[a.id];
@@ -88,6 +89,9 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
               required
               className="border border-gray-300 rounded-lg px-3 py-1 w-full"
             />
+            {title.trim().length === 0 && (
+              <p className="text-sm text-red-600 mt-1">Title is required.</p>
+            )}
           </div>
 
           {/* STAP 1: aromachemicals selecteren */}

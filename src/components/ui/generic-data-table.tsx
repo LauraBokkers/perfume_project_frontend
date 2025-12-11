@@ -76,6 +76,7 @@ export function DataTable<TData, TValue = unknown>({
   const table = useReactTable({
     data: data,
     columns: columns,
+    getRowId: (row: any) => row.id.toString(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {

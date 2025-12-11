@@ -1,6 +1,6 @@
 // ui/formulations/add-formulation/aromachemicals-formulation-table.tsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../../generic-data-table";
@@ -52,6 +52,10 @@ export default function AromachemicalsFormulationTable({
     () => new Set(initialSelectedIds)
   );
 
+  useEffect(() => {
+    setSelectedIds(new Set(initialSelectedIds));
+  }, [initialSelectedIds]);
+
   // geselecteerde scent categories (AND-filter)
   const [selectedScentCategories, setSelectedScentCategories] = useState<
     Set<string>
@@ -86,6 +90,18 @@ export default function AromachemicalsFormulationTable({
 
     return rows;
   }, [data, selectedScentCategories, selectedPersistence]);
+
+  // Gefilterde data sorteren zodat gelesecteerde items bovenaan komen //
+  const sortedData = useMemo(() => {
+    const rows = (filteredData ?? []).slice();
+    rows.sort((a, b) => {
+      const aSel = selectedIds.has(a.id);
+      const bSel = selectedIds.has(b.id);
+      if (aSel === bSel) return 0;
+      return aSel ? -1 : 1; // geselecteerde eerst
+    });
+    return rows;
+  }, [filteredData, selectedIds]);
 
   // centrale toggle-functie (voor checkbox én rij-click)
   const toggleSelect = React.useCallback((item: Aromachemical) => {
@@ -125,7 +141,7 @@ export default function AromachemicalsFormulationTable({
       {data && (
         <DataTable<Aromachemical>
           columns={columns}
-          data={filteredData}
+          data={sortedData}
           searchField="name"
           handleClickAdd={() => {}}
           showAddButton={false}
