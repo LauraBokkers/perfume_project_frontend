@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Formulation } from "./formulations-table";
-import AromachemicalsFormulationsTable from "./add-formulation/aromachemicals-formulations-table";
 import { Aromachemical } from "@/data-services/fetch-aromachemicals";
 import { CloseButton } from "../close-button";
+import AromachemicalsFormulationsTable from "./add-formulation/aromachemicals-formulations-table";
 
 type ModalPropType = {
   onClose: () => void;
@@ -14,21 +14,21 @@ type ModalPropType = {
 function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
   const [title, setTitle] = useState("");
 
-  // 1) wizard state
+  // wizard state
   const [step, setStep] = useState<1 | 2>(1);
 
-  // 2) selectie uit stap 1
+  // geselecteerde aromachemicals (controlled voor stap 1)
   const [selectedAromas, setSelectedAromas] = useState<Aromachemical[]>([]);
 
-  // 3) hoeveelheden voor stap 2 (key = aromachemical.id)
+  // hoeveelheden (key = a.id)
   const [quantities, setQuantities] = useState<
     Record<number, number | undefined>
   >({});
 
-  // helpers
   const closeModal = () => onClose();
   const goBackToStep1 = () => setStep(1);
 
+  // ESC sluit modal
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {
       onClose();
@@ -42,7 +42,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
     };
   }, []);
 
-  // zijn alle geselecteerde aromachemicals voorzien van een geldige hoeveelheid?
+  // validatie
   const isSubmitDisabled =
     title.trim().length === 0 ||
     selectedAromas.length === 0 ||
@@ -54,11 +54,10 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // bouw formula_line vanuit geselecteerde aromachemicals + quantities
     const formula_line: Formulation["formula_line"] = selectedAromas.map(
       (a) => ({
         aroma_chemical: a,
-        quantity: quantities[a.id] ?? 0, // 0 zou eigenlijk niet moeten kunnen door de disable-check
+        quantity: quantities[a.id] ?? 0,
       })
     );
 
@@ -75,8 +74,9 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
         aria-modal="true"
       >
         <CloseButton onClose={onClose} />
+
         <form onSubmit={handleFormSubmit} className="w-[700px]">
-          {/* Titel-blok */}
+          {/* TITLE INPUT */}
           <div className="mb-4 rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">
             <label htmlFor="name" className="block mb-1 text-lg font-medium">
               Title
@@ -94,27 +94,29 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
             )}
           </div>
 
-          {/* STAP 1: aromachemicals selecteren */}
+          {/* STEP 1 — SELECT AROMACHEMICALS */}
           <div className="mb-4 rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">
             {step === 1 && (
               <AromachemicalsFormulationsTable
                 onCancel={closeModal}
                 onNext={(selected) => {
                   setSelectedAromas(selected);
+
+                  // quantities behouden bij teruggaan naar stap 1
                   setQuantities((prev) => {
                     const next: Record<number, number | undefined> = {};
-                    selected.forEach((a) => {
-                      next[a.id] = prev[a.id];
-                    });
+                    selected.forEach((a) => (next[a.id] = prev[a.id]));
                     return next;
                   });
+
                   setStep(2);
                 }}
-                initialSelectedIds={selectedAromas.map((a) => a.id)}
+                selectedAromas={selectedAromas}
+                setSelectedAromas={setSelectedAromas}
               />
             )}
 
-            {/* STAP 2: hoeveelheden invullen */}
+            {/* STEP 2 — ENTER QUANTITIES */}
             {step === 2 && (
               <div className="max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4">
                 <div className="mt-4 space-y-4">
@@ -161,6 +163,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
                             </td>
                           </tr>
                         ))}
+
                         {selectedAromas.length === 0 && (
                           <tr>
                             <td
@@ -185,7 +188,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
             )}
           </div>
 
-          {/* Submit-knop onderaan: alleen actief in stap 2 en als alles geldig is */}
+          {/* SUBMIT */}
           <div className="mt-4 flex justify-start">
             <Button
               type="submit"
