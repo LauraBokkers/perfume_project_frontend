@@ -14,6 +14,8 @@ const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
     queryFn: () => fetchFormulationById(formulationId),
   });
 
+  console.log("Fetched formulation data:", data);
+
   // Closing modal with keyboard
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {
@@ -26,7 +28,6 @@ const ViewModal = ({ onClose, formulationId }: ViewModalPropType) => {
     return () => {
       document.body.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

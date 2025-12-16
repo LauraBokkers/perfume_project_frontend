@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { type Formulation, fetchFormulationById } from "./formulations-table";
 import { useQuery } from "@tanstack/react-query";
-import AddFormulalinesModal from "./add-formulalines-modal";
 import { CloseButton } from "../close-button";
+import AddFormulalinesModal from "./add-formulation/add-formulalines-modal";
+import { Aromachemical } from "@/data-services/fetch-aromachemicals";
 
 interface EditModalPropType {
   onClose: () => void;
@@ -34,6 +35,18 @@ const EditModal = ({
       onClose();
     }
   }
+
+  // selectie van aromachemicals binnen AddFormulalinesModal
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+
+  const onToggleSelect = (aroma: Aromachemical) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(aroma.id)) next.delete(aroma.id);
+      else next.add(aroma.id);
+      return next;
+    });
+  };
 
   function handleEditFormulaLines(id: number, quantity: number) {
     setFormulaLines((prev) => {
@@ -128,6 +141,8 @@ const EditModal = ({
                   {isAddFormulalinesModalOpen && (
                     <AddFormulalinesModal
                       existingFormulaLines={formulaLines}
+                      selectedIds={selectedIds}
+                      onToggleSelect={onToggleSelect}
                       onClose={() => setIsAddFormulalinesModalOpen(false)}
                       onConfirm={() => {
                         console.log("clicked");

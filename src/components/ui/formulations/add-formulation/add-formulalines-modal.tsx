@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Formulation } from "./formulations-table";
-import { CloseButton } from "../close-button";
+import { Formulation } from "../formulations-table";
+import { CloseButton } from "../../close-button";
+import { Aromachemical } from "@/data-services/fetch-aromachemicals";
 
 interface ModalPropType {
   existingFormulaLines: Formulation["formula_line"];
+  selectedIds: Set<number>;
+  onToggleSelect: (a: Aromachemical) => void;
   onClose: () => void;
   onConfirm: () => void;
 }

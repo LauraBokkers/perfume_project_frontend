@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Formulation } from "./formulations-table";
+import { Formulation } from "../formulations-table";
 import { Aromachemical } from "@/data-services/fetch-aromachemicals";
-import { CloseButton } from "../close-button";
-import AromachemicalsFormulationsTable from "./add-formulation/aromachemicals-formulations-table";
+import { CloseButton } from "../../close-button";
+import AromachemicalsFormulationsTable from "./aromachemicals-formulations-table";
 
 type ModalPropType = {
   onClose: () => void;
@@ -62,6 +62,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
     );
 
     handleSubmit({ title, formula_line });
+    console.log("Submitting formulation:", { title, formula_line });
     onClose();
   };
 
