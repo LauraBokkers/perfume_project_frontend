@@ -105,6 +105,7 @@ function ScentCategoryModal({
             "No categories found"
           )}
           <Button
+            variant="selector-subtle"
             onClick={(e) => {
               e.preventDefault();
               if (!data) return;

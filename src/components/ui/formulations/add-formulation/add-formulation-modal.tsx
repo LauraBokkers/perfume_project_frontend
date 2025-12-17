@@ -75,7 +75,7 @@ function AddModal({ onClose, handleSubmit, isPending }: ModalPropType) {
         aria-modal="true"
       >
         <CloseButton onClose={onClose} />
-
+        <h2 className="text-lg font-medium ml-1">Add new formulation</h2>
         <form onSubmit={handleFormSubmit} className="w-[700px]">
           {/* TITLE INPUT */}
           <div className="mb-4 rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">

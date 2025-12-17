@@ -114,11 +114,14 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
         </div>
 
         <form onSubmit={(e) => handleSubmit(e)}>
-          <div className="mb-4 rounded-xl bg-custom-accentLight px-4 py-3 bg-opacity-50">
-            <div className="grid lg:grid-cols-2 gap-8 grid-cols-1">
+          <h2 className="text-lg font-medium mb-4 ml-2">
+            Add new aromachemical
+          </h2>
+          <div className="rounded-xl bg-custom-accentLight px-4 py-4 bg-opacity-50">
+            <div className="grid lg:grid-cols-2 gap-4 grid-cols-1">
               <div>
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
-                  <label htmlFor="name" className="block mb-1">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 mb-4">
+                  <label htmlFor="name" className="block font-medium">
                     Name:
                   </label>
                   <input
@@ -131,8 +134,8 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                   />
                   {errors?.name && <ErrorLabel message={errors.name} />}
                 </div>
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
-                  <label htmlFor="description" className="mt-2 mb-2 block">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 mb-4">
+                  <label htmlFor="description" className="block font-medium">
                     Description:
                   </label>
                   <textarea
@@ -145,17 +148,21 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                 {errors?.description && (
                   <ErrorLabel message={errors.description} />
                 )}
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 flex flex-col items-start gap-4 mb-4">
-                  <label htmlFor="scent_category" className="whitespace-nowrap">
-                    Scent Categorie(s):
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 flex flex-col items-start gap-1 mb-4">
+                  <label
+                    htmlFor="scent_category"
+                    className="whitespace-nowrap font-medium"
+                  >
+                    Select Scent Categories:
                   </label>
                   <Button
                     onClick={() => setIsModalOpen(true)}
                     type="button"
                     className="rounded-xl justify-center w-[155px] hover:bg-custom-accentLight/60"
+                    variant="selector-subtle"
                   >
                     {" "}
-                    Select scent categories
+                    Select
                   </Button>
                   {isModalOpen && (
                     <ScentCategoryModal
@@ -178,8 +185,8 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                   </div>
                 </div>
 
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4">
-                  <label htmlFor="odor_strength" className="mt-2 mb-2 block">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1">
+                  <label htmlFor="odor_strength" className="block font-medium">
                     Odor Strength:
                   </label>
                   <select
@@ -204,8 +211,8 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                 </div>
               </div>
               <div>
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
-                  <label htmlFor="ifra_limit" className="mt-2 mb-2 block">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 mb-4">
+                  <label htmlFor="ifra_limit" className=" block font-medium">
                     IFRA Limit:
                   </label>
                   <input
@@ -216,8 +223,8 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                     className="border border-gray-300 rounded-lg px-3 py-2 w-full resize-y mb-4"
                   />
                 </div>
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
-                  <label htmlFor="supplier" className="mt-2 mb-2 block">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 mb-4">
+                  <label htmlFor="supplier" className="font-medium block">
                     Supplier:
                   </label>
                   <select
@@ -239,8 +246,8 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                   </select>
                 </div>
 
-                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
-                  <label htmlFor="persistence" className="mt-2 mb-2 block">
+                <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-1 mb-4">
+                  <label htmlFor="persistence" className="font-medium block">
                     Persistence:
                   </label>
                   <select
@@ -267,7 +274,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                 <div className="max-w-[700px] max-h-[500px] overflow-auto p-4 rounded-xl bg-custom-table space-y-4 mb-4">
                   <label
                     htmlFor="dilution_material"
-                    className="mt-2 mb-2 block"
+                    className="font-medium block"
                   >
                     Dilution Material:
                   </label>
