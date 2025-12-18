@@ -158,7 +158,7 @@ function AddModal({ onClose, onAddAromachemical, isPending }: ModalPropType) {
                   <Button
                     onClick={() => setIsModalOpen(true)}
                     type="button"
-                    className="rounded-xl justify-center w-[155px] hover:bg-custom-accentLight/60"
+                    className="justify-center w-[155px]"
                     variant="selector-subtle"
                   >
                     {" "}

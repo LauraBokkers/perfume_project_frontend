@@ -26,8 +26,9 @@ const buttonVariants = cva(
           "hover:bg-primary/15 hover:border-primary/50 " +
           "active:shadow-none active:translate-y-px",
         "selector-subtle":
-          "ring-1 ring-inset ring-black/30 " +
-          "hover:ring-black/90 hover:bg-custom-accentLight/60",
+          "rounded-xl ring-1 ring-inset ring-black/30 " +
+          "hover:ring-black/90 hover:bg-custom-accentLight/60 " +
+          "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent",
       },
       size: {
         default: "h-9 px-4 py-2",
